@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#116DC6</color>
+    <color name="colorPrimaryDark">#116DC6</color>
+    <color name="colorAccent">#6bb2ff</color>
+    <color name="textColorPrimary">#ffffff</color>
+    <color name="windowBackground">#ffffff</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- dialog color-->
+    <color name="colorDialogBackground">#ECEFF1</color>
+    <color name="colorDialogTitleBackground">#263238</color>
+    <color name="colorDialogTitleText">#ffffff</color>
+    <color name="colorDialogContentText">#000000</color>
+    <color name="colorDialogButtonBackground">#455A64</color>
+    <color name="colorDialogButtonText">#ffffff</color>
+    <color name="jy_color1">#00BFFF</color>
+    <color name="jy_color2">#F6DEC5</color>
+    <color name="jy_color3">#E9F7DD</color>
+    <color name="jy_color4">#D4EEFD</color>
+    <color name="jy_color5">#FFFDE2</color>
+    <color name="jy_color6">#FF029FE8</color>
+    <color name="jy_color7">#FF9900</color>
+    <color name="jy_color8">#EFEC00</color>
+    <color name="jy_color9">#ABA503</color>
+    <color name="base_text_color">#585858</color>
+    <color name="btn_menu_in_color">#6e6e6e</color>
+    <color name="btn_menu_out_color">#FF000000</color>
+
+
+    <color name="logoblue">#275BAB</color>
+    <color name="reject">#ED174B</color>
+    <color name="top">#275BAB</color>
+    <color name="bottom">#ED1B23</color>
+    <color name="base1">#292E1E</color>
+    <color name="base2">#E8E1EF</color>
+    <color name="scan_text">#F4D06F</color>
+    <color name="blue">#0000FF</color>
+    <color name="trnas">#00000000</color>
+    <color name="red">#FF0000</color>
+    <color name="green">#1bf702</color>
+    <color name="select">#B9F18C</color>
+    <color name="unselect">#FE5F55</color>
+</resources>

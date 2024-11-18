@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">HM_Production/Logistics Management</string>
+    <string name="check_version">Check Version</string>
+    <string name="btn_search">Find</string>
+    <string name="btn_set">Select</string>
+    <string name="btn_reg">Register</string>
+    <string name="btn_move">Move</string>
+
+    <string name="login_title_desc">Production/Logistics Management</string>
+    <string name="login_desc">Log-In</string>
+    <string name="loginid_desc">ID</string>
+    <string name="loginpw_desc">PASSWORD</string>
+    <string name="saveid_desc">Save ID</string>
+
+
+    <string name="title_activity_main2">Menu</string>
+    <string name="menu_stockin">Product Incoming Registration</string>
+    <string name="menu_stockin_desc">Receive and register the product.</string>
+    <string name="menu_stockmove">Inventory Movement</string>
+    <string name="menu_stockmove_desc">Move inventory between warehouses.</string>
+    <string name="menu_picking">Shipping Picking Registration</string>
+    <string name="menu_picking_desc">Register the product to be shipped.</string>
+    <string name="menu_mat">Input of production materials</string>
+    <string name="menu_mat_desc">Supply the materials needed for production.</string>
+    <string name="menu_stocklist">Stock Information</string>
+    <string name="menu_stocklist_desc">Check inventory information.</string>
+    <string name="menu_barcode">Customer Barcode Mapping</string>
+    <string name="menu_barcode_desc">Connect the internal barcode and the customer barcode.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="mat_rout_ins1">HAD31</string>
+    <string name="mat_rout_ins2">HAS01_HP</string>
+    <string name="mat_rout_ins3">HAS31_HP</string>
+    <string name="mat_rout_dis1">HPD-01</string>
+
+    <string name="mat_order_from">FROM : </string>
+    <string name="mat_order_to">TO : </string>
+    <string name="mat_order_set">NEXT</string>
+    <string name="mat_order_desc">No :</string>
+    <string name="mat_order_proditem_desc">item :</string>
+    <string name="mat_order_prodqty_desc">Qty :</string>
+    <string name="mat_order_prodloc_desc">Location :</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="custbarcode_item">Item BCR : </string>
+    <string name="custbarcode_cust">Customer BCR : </string>
+
+    <string name="fromloc_desc">From Location :</string>
+    <string name="toloc_desc">To Location :</string>
+</resources>
