@@ -93,12 +93,14 @@ public class SaleOrderActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onDestroy() {
         //ProdHelper.getInstance().setProdOrder(null);
+        //SaleHelper.getInstance().setOrder(null);
         super.onDestroy();
     }
 
     @Override
     public void onBackPressed() {
         finish();
+
         super.onBackPressed();
 
         // super.onBackPressed();
@@ -132,6 +134,7 @@ public class SaleOrderActivity extends AppCompatActivity implements View.OnClick
                 //ProdHelper.getInstance().setProdOrder(mAdapter.SelectItem);
                 Intent i = new Intent(this, SalePickingActivity.class);
                 startActivity(i);
+                finish();
             }
         }
     }
@@ -147,6 +150,7 @@ public class SaleOrderActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void SearchOrder(){
+        SaleHelper.getInstance().setOrder(null);
         progressDialog.show();
 
         try {

@@ -79,7 +79,7 @@ public class PlcFragment extends Fragment implements OnItemClickLintner {
     @Override
     public void onItemSelect(View v, int position) {
         try{
-            if(ProdHelper.getInstance().getProdComps().getItemNo().equals(mAdapter.SelectItem.getStepMat())){
+            if(ProdHelper.getInstance().getProdComps().getItemNo().equals(mAdapter.SelectItem.getMatCodeToItem())){
                 ProdHelper.getInstance().setProdPlc(mAdapter.SelectItem);
             }
             else{

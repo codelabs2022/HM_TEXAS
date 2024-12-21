@@ -195,11 +195,11 @@ public class ItemInfoActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onResponse(Call<List<StockItemDTO>> call, Response<List<StockItemDTO>> response) {
                     if (progressDialog.isShowing()) progressDialog.dismiss();
-
+                    mAdapter.mList.clear();
                     if (response.body() == null || response.body().size() == 0) {
                         Utility.getInstance().showDialog("Search Scan Lot", "No Has in Stock.", mContext);
                     } else {
-                        mAdapter.mList.clear();
+
                         mAdapter.mList.addAll(response.body());
                         mAdapter.notifyDataSetChanged();
                     }

@@ -133,13 +133,14 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
     }
     @Override
     protected void onDestroy() {
-
+        ProdHelper.getInstance().setProdOrder(null);
         this.unregisterReceiver(mReciver);
         super.onDestroy();
     }
 
     @Override
     public void onBackPressed() {
+        ProdHelper.getInstance().setProdOrder(null);
         finish();
         super.onBackPressed();
 
@@ -177,26 +178,35 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
             aa.show();
         }
         else if(view.getId() == R.id.btnPopupPlc){
-            PlcDialog bb = new PlcDialog(this, ProdItemNo);
-            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-            layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-            layoutParams.dimAmount = 0.8f;
-            bb.getWindow().setAttributes(layoutParams);
+            if(ProdHelper.getInstance().getProdComps() == null){
+                Utility.getInstance().showDialog("Release", "Please select the recipe you wish to input.", mContext);
+            }
+            else{
 
-            Button btnComplete = bb.findViewById(R.id.btnSetPlc);
-            btnComplete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    bb.dismiss();
+                PlcDialog bb = new PlcDialog(this, ProdItemNo);
+                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                layoutParams.dimAmount = 0.8f;
+                bb.getWindow().setAttributes(layoutParams);
 
-                    tvMat.setText(ProdHelper.getInstance().getProdPlc().getStepMat());
-                    tvStatus.setText(ProdHelper.getInstance().getProdPlc().getStep_Status());
-                    tvInput.setText(ProdHelper.getInstance().getProdPlc().getInput_Value().stripTrailingZeros().toPlainString());
-                    tvApply.setText(ProdHelper.getInstance().getProdPlc().getApply_Value().stripTrailingZeros().toPlainString());
-                }
-            });
+                Button btnComplete = bb.findViewById(R.id.btnSetPlc);
+                btnComplete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        bb.dismiss();
 
-            bb.show();
+                        if(ProdHelper.getInstance().getProdPlc() != null){
+                            tvMat.setText(ProdHelper.getInstance().getProdPlc().getMatCode());
+                            tvStatus.setText(ProdHelper.getInstance().getProdPlc().getProdCode());
+                            tvInput.setText(ProdHelper.getInstance().getProdPlc().getPlcQty().stripTrailingZeros().toPlainString());
+                            tvApply.setText(ProdHelper.getInstance().getProdPlc().getApplyQty().stripTrailingZeros().toPlainString());
+                        }
+
+                    }
+                });
+
+                bb.show();
+            }
         }
     }
 
@@ -254,6 +264,19 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                             Utility.getInstance().showDialog("Search Barcode", "The material is of a different product number than the selected recipe.", mContext);
                         }
                         else{
+                            boolean isSameBcr = false;
+
+                            for(int k=0; k<mAdapter.mList.size(); k++){
+                                if(mAdapter.mList.get(k).getBarCode().equals(response.body().get(0).getBarCode())){
+                                    isSameBcr = true;
+                                    break;
+                                }
+                            }
+
+                            if(isSameBcr){
+                                Utility.getInstance().showDialog("Search Scan Lot", "Alredy Scan Item Barcode.", mContext);
+                            }
+
                             for(int i=0; i<response.body().size(); i++){
                                 response.body().get(i).setEmptyCaseQty(new BigDecimal(etEmptyCase.getText().toString()));
                             }
@@ -280,6 +303,18 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
     private void ReleaseMat(){
         try {
             progressDialog.show();
+            boolean iValidation = true;
+            if(mAdapter.mList.size() == 0){
+                Utility.getInstance().showDialog("Release", "There are no materials to input.", mContext);
+                iValidation = false;
+            }
+
+            if(ProdHelper.getInstance().getProdComps() == null){
+                Utility.getInstance().showDialog("Release", "Please select the recipe you wish to input.", mContext);
+                iValidation = false;
+            }
+
+            if(iValidation == false) return;
 
             List<ReleaseDTO> sendDatas = new ArrayList<>();
 
@@ -310,7 +345,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
             long plcId = 0;
             if(ProdHelper.getInstance().getProdPlc() != null)
             {
-                plcStep = ProdHelper.getInstance().getProdPlc().getStepGroup();
+                plcStep = 0;//ProdHelper.getInstance().getProdPlc().getStepGroup();
                 plcId = ProdHelper.getInstance().getProdPlc().getRid();
             }
 

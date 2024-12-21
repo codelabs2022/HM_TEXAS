@@ -6,8 +6,11 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -29,6 +32,7 @@ import com.pda.hm_texas.dig.RecipeDialog;
 import com.pda.hm_texas.dto.DbResultVO;
 import com.pda.hm_texas.dto.PickingDTO;
 import com.pda.hm_texas.dto.StockItemDTO;
+import com.pda.hm_texas.event.OnItemClickLintner;
 import com.pda.hm_texas.event.OnItemLongClickListener;
 import com.pda.hm_texas.event.OnScanListener;
 import com.pda.hm_texas.event.ScanReceiver;
@@ -48,11 +52,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SalePickingActivity extends AppCompatActivity  implements View.OnClickListener, OnScanListener, OnItemLongClickListener {
+public class SalePickingActivity extends AppCompatActivity  implements View.OnClickListener, OnScanListener, OnItemLongClickListener, OnItemClickLintner {
 
     private Context mContext;
     private IntentFilter filter;
     private ScanReceiver mReciver = null;
+    private InputMethodManager imm;
 
     private TextView tvOrdeNo, tvItem, tvLoc, tvQty, tvPickingQty;
     private Button btnReg;
@@ -82,6 +87,8 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
         this.registerReceiver(mReciver, filter);
         mReciver.SetOnScanListener(this);
 
+        imm = (InputMethodManager) mContext.getSystemService(INPUT_METHOD_SERVICE);
+
         progressDialog = new ProgressDialog(SalePickingActivity.this, "Processing....");
         progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         progressDialog.setCancelable(false);
@@ -110,6 +117,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
 
         mAdapterScanItem = new ProdItemAdapter(this);
         mAdapterScanItem.SetOnItemLongClickListiner(this);
+        mAdapterScanItem.SetOnQtyChangeListener(this);
         rvPickingList = findViewById(R.id.rvSalePickingItem);
         rvPickingList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         rvPickingList.setAdapter(mAdapterScanItem);
@@ -120,12 +128,14 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
     @Override
     protected void onDestroy() {
         this.unregisterReceiver(mReciver);
+        SaleHelper.getInstance().setOrder(null);
         super.onDestroy();
     }
 
     @Override
     public void onBackPressed() {
         finish();
+        SaleHelper.getInstance().setOrder(null);
         super.onBackPressed();
 
         // super.onBackPressed();
@@ -146,6 +156,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
             Utility.getInstance().showDialog("Search Lot", "There are no items available for export.", mContext);
         }
         else{
+            imm.hideSoftInputFromWindow(rvLotList.getWindowToken(), 0);
             LoadBarcode(ScanData);
         }
     }
@@ -161,6 +172,18 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
         }
     }
 
+    @Override
+    public void onItemSelect(View v, int position) {
+        try{
+            BigDecimal totalQuantity = mAdapterScanItem.mList.stream()
+                    .map(StockItemDTO::getRemainingQuantity)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+            tvPickingQty.setText("TOTAL PICKING : "+totalQuantity.stripTrailingZeros().toPlainString());
+        }
+        catch (Exception ex){
+
+        }
+    }
     private void LoadOrderLotInStock(){
         progressDialog.show();
 
@@ -214,23 +237,54 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
 
                             boolean found  = mAdapterLotinStock.mList.stream().anyMatch(item -> item.getBarCode().equals(response.body().get(0).getBarCode()));
 
-
                             if(found){
-                                mAdapterScanItem.mList.add(response.body().get(0));
-                                mAdapterScanItem.notifyDataSetChanged();
-                                BigDecimal totalQuantity = mAdapterScanItem.mList.stream()
-                                                                                    .map(StockItemDTO::getRemainingQuantity)
-                                                                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-                                tvPickingQty.setText("TOTAL PICKING : "+totalQuantity.stripTrailingZeros().toPlainString());
-
-                                OptionalInt index = IntStream.range(0, mAdapterLotinStock.mList.size())
-                                        .filter(i -> mAdapterLotinStock.mList.get(i).getBarCode().equals(response.body().get(0).getBarCode()))
-                                        .findFirst();
-                                if (index.isPresent()) {
-                                    mAdapterLotinStock.mList.get(index.getAsInt()).setSelect(true); // Index: 1
-                                    mAdapterLotinStock.notifyDataSetChanged();
+                                boolean isSameBcr = false;
+                                boolean isNotFirstMat = false;
+                                for(int k=0; k<mAdapterScanItem.mList.size(); k++){
+                                    if(mAdapterScanItem.mList.get(k).getBarCode().equals(response.body().get(0).getBarCode())){
+                                        isSameBcr = true;
+                                        break;
+                                    }
                                 }
 
+                                for(int k=0; k<mAdapterLotinStock.mList.size(); k++){
+                                    String ordMfcDate = mAdapterLotinStock.mList.get(k).getManufacturingDate();
+                                    String scanMfcDate = response.body().get(0).getManufacturingDate();
+
+                                    if(TextUtils.isEmpty(ordMfcDate))ordMfcDate = Utility.getInstance().getToday();
+                                    if(TextUtils.isEmpty(scanMfcDate))scanMfcDate = Utility.getInstance().getToday();
+
+                                    if(Utility.getInstance().isPastDate(ordMfcDate, scanMfcDate) == 1){
+                                        if(mAdapterLotinStock.mList.get(k).isSelect() == false){
+                                            isNotFirstMat = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if(isSameBcr == true ){
+                                    Utility.getInstance().showDialog("Search Scan Lot", "Alredy Scan Item Barcode.", mContext);
+                                }
+                                else if(isNotFirstMat == true){
+                                    Utility.getInstance().showDialog("Search Scan Lot", "There are LOT products that were produced previously.", mContext);
+                                }
+                                else{
+                                    mAdapterScanItem.mList.add(response.body().get(0));
+                                    mAdapterScanItem.notifyDataSetChanged();
+
+                                    BigDecimal totalQuantity = mAdapterScanItem.mList.stream()
+                                            .map(StockItemDTO::getRemainingQuantity)
+                                            .reduce(BigDecimal.ZERO, BigDecimal::add);
+                                    tvPickingQty.setText("TOTAL PICKING : "+totalQuantity.stripTrailingZeros().toPlainString());
+
+                                    OptionalInt index = IntStream.range(0, mAdapterLotinStock.mList.size())
+                                            .filter(i -> mAdapterLotinStock.mList.get(i).getBarCode().equals(response.body().get(0).getBarCode()))
+                                            .findFirst();
+                                    if (index.isPresent()) {
+                                        mAdapterLotinStock.mList.get(index.getAsInt()).setSelect(true); // Index: 1
+                                        mAdapterLotinStock.notifyDataSetChanged();
+                                    }
+                                }
                             }
                             else{
                                 Utility.getInstance().showDialog("Search Scan Lot", "The scanned item is not on the list of available items for shipment.", mContext);
@@ -254,6 +308,31 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
     }
 
     private void SetPicking(){
+        boolean isCheck = true;
+        if(mAdapterScanItem.mList.size() == 0){
+            Utility.getInstance().showDialog("Item", "There are no items to Picking.", mContext);
+            isCheck = false;
+        }
+
+        for(StockItemDTO dto : mAdapterScanItem.mList){
+            if(dto.getRemainingQuantity().floatValue() == 0){
+                Utility.getInstance().showDialog("Item", "There are items with quantities of 0 or not entered.", mContext);
+                isCheck = false;
+                break;
+            }
+            if(dto.getRemainingQuantity() == null){
+                Utility.getInstance().showDialog("Item", "There are items with quantities of 0 or not entered.", mContext);
+                isCheck = false;
+                break;
+            }
+        }
+        //String txtTotalPickingQty = tvPickingQty.getText().toString().split(":")[1].trim();
+        if(SaleHelper.getInstance().getOrder().getOrderQty().floatValue() < new BigDecimal(tvPickingQty.getText().toString().split(":")[1].trim()).floatValue()){
+            Utility.getInstance().showDialog("PICKING", "Picked more than the instructed quantity.", mContext);
+            isCheck = false;
+        }
+        if(!isCheck)return;
+
         progressDialog.show();
 
         try {
@@ -276,6 +355,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                             mAdapterScanItem.mList.clear();
                             mAdapterScanItem.notifyDataSetChanged();
                             LoadOrderLotInStock();
+                            finish();
                         }
                         else{
                             Utility.getInstance().showDialog("Picking Fail", "Fail to Resister Picking", mContext);
@@ -296,5 +376,6 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
             ex.printStackTrace();
         }
     }
+
 
 }

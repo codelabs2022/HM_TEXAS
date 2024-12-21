@@ -33,6 +33,7 @@ import com.pda.hm_texas.helper.LoginUser;
 import com.pda.hm_texas.helper.RetorfitHelper;
 import com.pda.hm_texas.helper.Utility;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,6 +162,14 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public boolean onKey(View view, int i, KeyEvent keyEvent) {
+
+        if(view.getId() == R.id.etMoveBarcode){
+            if(i == KeyEvent.KEYCODE_ENTER)
+            {
+                SearchItem(etBarcode.getText().toString());
+                return true;
+            }
+        }
         return false;
     }
 
@@ -227,9 +236,21 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
                                 Utility.getInstance().showDialog("Search Scan Lot", "Two or more items were found.", mContext);
                             }
                             else{
+                                boolean isSameBcr = false;
+                                for(int a=0; a<mAdapter.mList.size(); a++){
+                                    if(response.body().get(0).getBarCode().equals(mAdapter.mList.get(a).getBarCode())){
+                                        isSameBcr = true;
+                                    }
+                                }
 
-                                mAdapter.mList.add(response.body().get(0));
-                                mAdapter.notifyDataSetChanged();
+                                if(isSameBcr == false){
+                                    mAdapter.mList.add(response.body().get(0));
+                                    mAdapter.notifyDataSetChanged();
+                                }
+                                else{
+                                    Utility.getInstance().showDialog("Search Scan Lot", "Alredy Scan Item Barcode.", mContext);
+                                    etBarcode.setText("");
+                                }
                             }
 
                         }
@@ -251,6 +272,20 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void setMove(){
+        boolean isCheck = true;
+
+        if(mAdapter.mList.size() == 0){
+            Utility.getInstance().showDialog("Item", "There are no items to move.", mContext);
+            isCheck = false;
+        }
+
+        if(selectedToLocation.getCode().equals(selectedFromLocation.getCode())){
+            Utility.getInstance().showDialog("Location", "The warehouse before and after moving are the same.", mContext);
+            isCheck = false;
+        }
+
+        if(!isCheck) return;
+
         if(selectedToLocation == null)
         {
             Utility.getInstance().showDialog("Location", "Please select a To location.", mContext);
@@ -269,14 +304,14 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
                         if (response.body() == null) {
                             Utility.getInstance().showDialog("Move Item", "No processing result has been received.", mContext);
                         } else {
-                            if(response.body().getERR_CODE().equals("S00"))
+                            if(response.body().getERR_CODE().equals("1"))
                             {
                                 mAdapter.mList.clear();
                                 mAdapter.notifyDataSetChanged();
                                 Utility.getInstance().showDialog("Move Item", "Success.", mContext);
                             }
                             else{
-                                Utility.getInstance().showDialog("Move Item", "Fail", mContext);
+                                Utility.getInstance().showDialog("Move Item", response.body().getERR_MSG(), mContext);
                             }
                         }
                     }
@@ -285,6 +320,9 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
                     public void onFailure(Call<DbResultVO> call, Throwable t) {
                         if (progressDialog.isShowing()) progressDialog.dismiss();
                         Utility.getInstance().showDialog("Move Item", t.getMessage(), mContext);
+
+                        mAdapter.mList.clear();
+                        mAdapter.notifyDataSetChanged();
                     }
                 });
             } catch (Exception ex) {
@@ -292,6 +330,9 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
 
                 Utility.getInstance().showDialog("Move Item", ex.getMessage(), mContext);
                 ex.printStackTrace();
+
+                mAdapter.mList.clear();
+                mAdapter.notifyDataSetChanged();
             }
         }
     }

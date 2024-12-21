@@ -67,7 +67,7 @@ public class PlcDialog extends Dialog implements OnItemClickLintner, View.OnClic
     public void onClick(View view) {
         if(view.getId() == R.id.btnSetRecipe){
             try{
-                ProdHelper.getInstance().setProdPlc(mAdapter.SelectItem);
+                if(mAdapter.SelectItem != null)ProdHelper.getInstance().setProdPlc(mAdapter.SelectItem);
             }catch (Exception ex){
                 ex.printStackTrace();
             }
@@ -83,7 +83,13 @@ public class PlcDialog extends Dialog implements OnItemClickLintner, View.OnClic
                     if (response.body() == null || response.body().size() == 0) {
                         Utility.getInstance().showDialog("Search Plc", "No Has Plc.", mContext);
                     } else {
-                        mAdapter.mList.addAll(response.body());
+
+                        for(PlcMatrailDTO dto : response.body()){
+                            if(dto.getMatCodeToItem().equals(ProdHelper.getInstance().getProdComps().getItemNo())){
+                                mAdapter.mList.add(dto);
+                            }
+                        }
+                        //mAdapter.mList.addAll(response.body());
                         mAdapter.notifyDataSetChanged();
                     }
                 }

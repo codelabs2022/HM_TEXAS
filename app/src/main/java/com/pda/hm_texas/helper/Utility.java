@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
 
 import javax.crypto.Cipher;
@@ -43,6 +44,9 @@ public class Utility {
 
         return Instance;
     }
+
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
     public void showDialog(String title, String msg , Context context) {
 
         ContextThemeWrapper cw = new ContextThemeWrapper( context, androidx.appcompat.R.style.AlertDialog_AppCompat );
@@ -155,5 +159,32 @@ public class Utility {
 
     public boolean isNumber(String strValue) {
         return strValue != null && strValue.matches("[-+]?\\d*\\.?\\d+");
+    }
+
+    public int isPastDate(String oldDate, String newDate){
+        int res = 0;
+        try {
+            Date date1 = new Date(dateFormat.parse(oldDate).getTime());
+            Date date2 = new Date(dateFormat.parse(newDate).getTime());
+
+            //compareTo메서드를 통한 날짜비교
+            int compare = date1.compareTo(date2);
+
+            //조건문
+            if(compare > 0) {
+                System.out.println("oldDate가 newDate보다 큽니다.(oldDate > newDate)");
+                res = -1;
+            }else if(compare < 0) {
+                System.out.println("oldDate가 newDate보다 작습니다.(oldDate < newDate)");
+                res = 1;
+            }else {
+                System.out.println("oldDate와 newDate가 같습니다.(oldDate = newDate)");
+                res = 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return res;
     }
 }

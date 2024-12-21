@@ -95,7 +95,7 @@ public class InsulationFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View view) {
         String routCode = "";
-        if(view.getId() == R.id.btnIns1)routCode = "HDA31";
+        if(view.getId() == R.id.btnIns1)routCode = "HAD31";
         else if(view.getId() == R.id.btnIns2)routCode = "HAS01_HP";
         else if(view.getId() == R.id.btnIns3)routCode = "HAS31_HP";
 

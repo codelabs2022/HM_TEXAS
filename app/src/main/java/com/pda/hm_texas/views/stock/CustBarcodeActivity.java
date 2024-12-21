@@ -218,6 +218,7 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
                     public void onFailure(Call<List<TransBarcodeItemDTO>> call, Throwable t) {
                         if (progressDialog.isShowing()) progressDialog.dismiss();
                         Utility.getInstance().showDialog("Search Lot", "Fail to GetData Server.", mContext);
+                        etBarcode.setText("");
                     }
                 });
             }
@@ -226,6 +227,7 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
 
             Utility.getInstance().showDialog("Search Lot", ex.getMessage(), mContext);
             ex.printStackTrace();
+            etBarcode.setText("");
         }
     }
 
@@ -262,46 +264,48 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void SetCustBarcode(){
-        progressDialog.show();
+        if(mAdapter.mList.size() > 0){
+            progressDialog.show();
 
-        try {
-            Call<DbResultVO> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL).setCustBarcode(mAdapter.mList);
-            data.enqueue(new Callback<DbResultVO>() {
-                @Override
-                public void onResponse(Call<DbResultVO> call, Response<DbResultVO> response) {
-                    if (progressDialog.isShowing()) progressDialog.dismiss();
+            try {
+                Call<DbResultVO> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL).setCustBarcode(mAdapter.mList);
+                data.enqueue(new Callback<DbResultVO>() {
+                    @Override
+                    public void onResponse(Call<DbResultVO> call, Response<DbResultVO> response) {
+                        if (progressDialog.isShowing()) progressDialog.dismiss();
 
-                    if (response.body() == null ) {
-                        Utility.getInstance().showDialog("Mapping", "No Has in Stock.", mContext);
-                    } else {
-                        if(response.body().getERR_CODE().equals("S00"))
-                        {
-                            Utility.getInstance().showDialog("Mapping", "Success.", mContext);
-                            etBarcode.setText("");
-                            etCustBarcode.setText("");
-                            nowScanItem = null;
+                        if (response.body() == null ) {
+                            Utility.getInstance().showDialog("Mapping", "No Has in Stock.", mContext);
+                        } else {
+                            if(response.body().getERR_CODE().equals("S00"))
+                            {
+                                Utility.getInstance().showDialog("Mapping", "Success.", mContext);
+                                etBarcode.setText("");
+                                etCustBarcode.setText("");
+                                nowScanItem = null;
 
-                            mAdapter.mList.clear();
-                            mAdapter.notifyDataSetChanged();
-                        }
-                        else
-                        {
-                            Utility.getInstance().showDialog("Mapping", "Customer barcode mapping failed.", mContext);
+                                mAdapter.mList.clear();
+                                mAdapter.notifyDataSetChanged();
+                            }
+                            else
+                            {
+                                Utility.getInstance().showDialog("Mapping", "Customer barcode mapping failed.", mContext);
+                            }
                         }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<DbResultVO> call, Throwable t) {
-                    if (progressDialog.isShowing()) progressDialog.dismiss();
-                    Utility.getInstance().showDialog("Mapping", "Fail to GetData Server.", mContext);
-                }
-            });
-        } catch (Exception ex) {
-            if (progressDialog.isShowing()) progressDialog.dismiss();
+                    @Override
+                    public void onFailure(Call<DbResultVO> call, Throwable t) {
+                        if (progressDialog.isShowing()) progressDialog.dismiss();
+                        Utility.getInstance().showDialog("Mapping", "Fail to GetData Server.", mContext);
+                    }
+                });
+            } catch (Exception ex) {
+                if (progressDialog.isShowing()) progressDialog.dismiss();
 
-            Utility.getInstance().showDialog("Mapping", ex.getMessage(), mContext);
-            ex.printStackTrace();
+                Utility.getInstance().showDialog("Mapping", ex.getMessage(), mContext);
+                ex.printStackTrace();
+            }
         }
     }
 }

@@ -33,14 +33,14 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
             return insets;
         });
 
-        LinearLayout llStockIn = findViewById(R.id.llStockIn);
+        //LinearLayout llStockIn = findViewById(R.id.llStockIn);
         LinearLayout llStockMove = findViewById(R.id.llStockMove);
         LinearLayout llPicking = findViewById(R.id.llPicking);
         LinearLayout llMat = findViewById(R.id.llMat);
         LinearLayout llStockList = findViewById(R.id.llStockList);
         LinearLayout llBarcode = findViewById(R.id.llMapping);
 
-        llStockIn.setOnClickListener(this);
+        //llStockIn.setOnClickListener(this);
         llStockMove.setOnClickListener(this);
         llPicking.setOnClickListener(this);
         llMat.setOnClickListener(this);
@@ -63,10 +63,11 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         Intent i = null;
 
-        if(v.getId() == R.id.llStockIn){
-            i = new Intent(this, EnterOrderActivity.class);
-        }
-        else if(v.getId() == R.id.llStockMove){
+//        if(v.getId() == R.id.llStockIn){
+//            i = new Intent(this, EnterOrderActivity.class);
+//        }
+        //else
+        if(v.getId() == R.id.llStockMove){
             i = new Intent(this, MoveItemActivity.class);
         }
         else if(v.getId() == R.id.llPicking){

@@ -89,10 +89,10 @@ public class PlcAdapter extends RecyclerView.Adapter<PlcViewHolder>{
             }
 
 
-            holder.tvMat.setText(item.getStepMat());
-            holder.tvStatus.setText(item.getStep_Status());
-            holder.tvInput.setText(item.getInput_Value().stripTrailingZeros().toPlainString());
-            holder.tvApply.setText(item.getApply_Value().stripTrailingZeros().toPlainString());
+            holder.tvMat.setText(item.getMatCode());
+            holder.tvStatus.setText(item.getProdCode());
+            holder.tvInput.setText(item.getPlcQty().stripTrailingZeros().toPlainString());
+            holder.tvApply.setText(item.getApplyQty().stripTrailingZeros().toPlainString());
         }
         catch (Exception ex){
             ex.printStackTrace();

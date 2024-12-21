@@ -17,8 +17,8 @@ public class RetorfitHelper {
     //public static final String USE_URL = "http://1.215.46.190:5701/";
     //public static final String USE_URL = "http://192.168.219.128:5702/";
     //public static final String USE_URL =  "http://192.168.0.24:8080/";
-    //public static final String USE_URL =  "http://192.168.0.26:8080/";
-    public static final String USE_URL =  "http://4.255.209.126:8080/";
+    public static final String USE_URL =  "http://192.168.10.17:8080/";
+    //public static final String USE_URL =  "http://4.255.209.126:8080/";
 
 
     public static ApiService getApiService(String url){

@@ -47,67 +47,68 @@
             android:paddingRight="10dp"
             android:weightSum="10">
 
-            <LinearLayout
-                android:id="@+id/llStockIn"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.6"
-                android:orientation="horizontal"
-                android:weightSum="10">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/llStockIn"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_weight="1.6"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:background="?attr/selectableItemBackground"-->
+<!--                android:weightSum="10">-->
 
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:padding="15dp"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/stockin" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/imageView3"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="2"-->
+<!--                    android:padding="15dp"-->
+<!--                    android:scaleType="centerInside"-->
+<!--                    app:srcCompat="@drawable/stockin" />-->
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="7.5"
-                    android:orientation="vertical"
-                    android:weightSum="2">
+<!--                <LinearLayout-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="7.5"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:weightSum="2">-->
 
-                    <TextView
-                        android:id="@+id/textView4"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="bottom|left"
-                        android:text="@string/menu_stockin"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        tools:ignore="DuplicateIds" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView4"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="0dp"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:gravity="bottom|left"-->
+<!--                        android:text="@string/menu_stockin"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        tools:ignore="DuplicateIds" />-->
 
-                    <TextView
-                        android:id="@+id/textView5"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:gravity="top|left"
-                        android:text="@string/menu_stockin_desc"
-                        android:textColor="@color/base_text_color"
-                        android:textSize="14sp" />
-                </LinearLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView5"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="0dp"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:gravity="top|left"-->
+<!--                        android:text="@string/menu_stockin_desc"-->
+<!--                        android:textColor="@color/base_text_color"-->
+<!--                        android:textSize="14sp" />-->
+<!--                </LinearLayout>-->
 
-                <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    app:srcCompat="@drawable/next" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/imageView4"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="0.5"-->
+<!--                    app:srcCompat="@drawable/next" />-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
             <LinearLayout
                 android:id="@+id/llStockMove"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.6"
+                android:layout_weight="1.92"
                 android:orientation="horizontal"
                 android:weightSum="10">
 
@@ -154,11 +155,11 @@
 
                 <ImageView
                     android:id="@+id/imageView4"
-                    tools:ignore="DuplicateIds"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    app:srcCompat="@drawable/next" />
+                    app:srcCompat="@drawable/next"
+                    tools:ignore="DuplicateIds" />
 
             </LinearLayout>
 
@@ -166,7 +167,7 @@
                 android:id="@+id/llPicking"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.6"
+                android:layout_weight="1.92"
                 android:orientation="horizontal"
                 android:weightSum="10">
 
@@ -213,11 +214,11 @@
 
                 <ImageView
                     android:id="@+id/imageView4"
-                    tools:ignore="DuplicateIds"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    app:srcCompat="@drawable/next" />
+                    app:srcCompat="@drawable/next"
+                    tools:ignore="DuplicateIds" />
 
             </LinearLayout>
 
@@ -225,7 +226,7 @@
                 android:id="@+id/llMat"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.6"
+                android:layout_weight="1.92"
                 android:orientation="horizontal"
                 android:weightSum="10">
 
@@ -284,7 +285,7 @@
                 android:id="@+id/llStockList"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.6"
+                android:layout_weight="1.92"
                 android:orientation="horizontal"
                 android:weightSum="10">
 
@@ -343,7 +344,7 @@
                 android:id="@+id/llMapping"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.6"
+                android:layout_weight="1.92"
                 android:orientation="horizontal"
                 android:weightSum="10">
 

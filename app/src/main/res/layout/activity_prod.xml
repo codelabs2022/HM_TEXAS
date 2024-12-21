@@ -45,41 +45,42 @@
                     android:gravity="center|right"
                     android:text="@string/mat_order_desc"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvMatRegOrderNo"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="3.3"
+                    android:layout_weight="3.6"
                     android:gravity="center|left"
                     android:text="TextView"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="13sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textView10"
+                    android:id="@+id/textView13"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1.5"
+                    android:layout_weight="2.8"
                     android:gravity="center|right"
-                    android:text="@string/mat_order_proditem_desc"
+                    android:text="@string/mat_order_prodloc_desc"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvMatRegItem"
+                    android:id="@+id/tvMatRegLoc"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="5.7"
+                    android:layout_weight="4"
                     android:gravity="center|left"
                     android:text="TextView"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
+
 
             </LinearLayout>
 
@@ -91,43 +92,43 @@
                 android:weightSum="12">
 
                 <TextView
-                    android:id="@+id/textView13"
+                    android:id="@+id/textView10"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="3"
+                    android:layout_weight="1.5"
                     android:gravity="center|right"
-                    android:text="@string/mat_order_prodloc_desc"
+                    android:text="@string/mat_order_proditem_desc"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvMatRegLoc"
+                    android:id="@+id/tvMatRegItem"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="4"
+                    android:layout_weight="7.2"
                     android:gravity="center|left"
                     android:text="TextView"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="13sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textView12"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1.5"
+                    android:layout_weight="1"
                     android:gravity="center|right"
                     android:text="@string/mat_order_prodqty_desc"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvMatRegQty"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="3.5"
+                    android:layout_weight="2.2"
                     android:gravity="center|right"
                     android:inputType="number|numberDecimal"
                     android:text="0"
@@ -177,7 +178,7 @@
                         android:background="@drawable/down_line_blue"
                         android:text="Recipe"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <Button
@@ -186,7 +187,8 @@
                         android:layout_height="match_parent"
                         android:layout_weight="3"
                         android:background="@color/colorPrimary"
-                        android:text="SET" />
+                        android:text="SET"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -201,7 +203,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:textColor="@color/black"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -210,7 +212,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:textColor="@color/black"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -227,7 +229,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:textColor="@color/black"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -236,7 +238,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="4"
                         android:textColor="@color/black"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -248,7 +250,7 @@
                         android:inputType="number|numberDecimal"
                         android:text="0"
                         android:textColor="@color/green"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -260,7 +262,7 @@
                         android:inputType="number|numberDecimal"
                         android:text="0"
                         android:textColor="@color/blue"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
@@ -294,7 +296,7 @@
                         android:background="@drawable/down_line_blue"
                         android:text="PLC"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <Button
@@ -303,40 +305,42 @@
                         android:layout_height="match_parent"
                         android:layout_weight="3"
                         android:background="@color/colorPrimary"
-                        android:text="SET" />
+                        android:text="SET"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="0.8"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:weightSum="10">
 
                     <TextView
                         android:id="@+id/tvProdPlcMat"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2.5"
+                        android:layout_weight="2"
                         android:gravity="center"
                         android:textColor="@color/black"
-                        android:textSize="16sp"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvProdPlcStatus"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2.5"
+                        android:layout_weight="4"
                         android:gravity="center"
                         android:textColor="@color/black"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tvProdPlcInput"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2.5"
+                        android:layout_weight="2"
                         android:gravity="center"
                         android:textColor="@color/black"
                         android:textSize="16sp"
@@ -346,7 +350,7 @@
                         android:id="@+id/tvProdPlcApply"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="2.5"
+                        android:layout_weight="2"
                         android:gravity="center"
                         android:textColor="@color/black"
                         android:textSize="16sp"
