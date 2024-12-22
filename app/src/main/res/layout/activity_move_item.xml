@@ -50,6 +50,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="7.3"
                 android:gravity="center"
+                android:imeOptions="actionGo"
+                android:singleLine="true"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />

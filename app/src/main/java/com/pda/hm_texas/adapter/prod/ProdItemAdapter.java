@@ -115,8 +115,10 @@ public class ProdItemAdapter extends RecyclerView.Adapter<ProdItemViewHolder>{
                     if(i == KeyEvent.KEYCODE_ENTER)
                     {
                         if (TextUtils.isEmpty(holder.tvRemainQty.getText())) {
-                            holder.tvRemainQty.setText("0");
-                            item.setRemainingQuantity(BigDecimal.ZERO);
+//                            holder.tvRemainQty.setText("0");
+//                            item.setRemainingQuantity(BigDecimal.ZERO);
+                            holder.tvRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString());
+                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(item.getRemainingQuantity());
                             //mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
                         }
                         try {
@@ -124,22 +126,30 @@ public class ProdItemAdapter extends RecyclerView.Adapter<ProdItemViewHolder>{
                             BigDecimal value = new BigDecimal(holder.tvRemainQty.getText().toString());
 
                             // 0보다 큰지 확인
-                            if (value.compareTo(BigDecimal.ZERO) > 0) {
-                                mList.get(holder.getAdapterPosition()).setRemainingQuantity(value); // 값 반영
-                            }
-                            else if(item.getRemainingQuantity().floatValue() < value.floatValue()){
-                                holder.tvRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString());
-                                mList.get(holder.getAdapterPosition()).setRemainingQuantity(item.getRemainingQuantity());
+                            if (value.floatValue() >= 0) {
+                                if(item.getRemainingQuantity().floatValue() < value.floatValue()){
+                                    holder.tvRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString());
+                                    //mList.get(holder.getAdapterPosition()).setRemainingQuantity(item.getRemainingQuantity());
+                                }
+                                else if(value.floatValue() == 0){
+                                    holder.tvRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString());
+                                }
+                                else{
+                                    //holder.tvRemainQty.setText(value);
+                                    mList.get(holder.getAdapterPosition()).setRemainingQuantity(value); // 값 반영
+                                }
                             }
                             else {
                                 // 음수 입력 시 처리 (옵션)
-                                item.setRemainingQuantity(BigDecimal.ZERO);
-                                mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
+                                //item.setRemainingQuantity(BigDecimal.ZERO);
+                                //mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
+                                holder.tvRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString());
+                                mList.get(holder.getAdapterPosition()).setRemainingQuantity(item.getRemainingQuantity());
                             }
                         } catch (NumberFormatException e) {
                             // 숫자가 아닌 값 입력 시 처리
-                            item.setRemainingQuantity(BigDecimal.ZERO);
-                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
+                            holder.tvRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString());
+                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(item.getRemainingQuantity());
                         }
                         if (qtyChangeListner != null) {
                             qtyChangeListner.onItemSelect(holder.tvRemainQty, position);
@@ -160,30 +170,30 @@ public class ProdItemAdapter extends RecyclerView.Adapter<ProdItemViewHolder>{
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                     //mList.get(holder.getAdapterPosition()).setRemainingQuantity(new BigDecimal(charSequence.toString())); // 데이터셋에 값 반영
-                    if (charSequence == null || charSequence.toString().trim().isEmpty()) {
-                        mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
-                        return;
-                    }
-
-                    try {
-                        // BigDecimal 생성
-                        BigDecimal value = new BigDecimal(charSequence.toString());
-
-                        // 0보다 큰지 확인
-                        if (value.compareTo(BigDecimal.ZERO) >= 0) {
-                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(value); // 값 반영
-                        }
-                        else if(item.getRemainingQuantity().floatValue() < value.floatValue()){
-                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(item.getRemainingQuantity());
-                        }
-                        else {
-                            // 음수 입력 시 처리 (옵션)
-                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
-                        }
-                    } catch (NumberFormatException e) {
-                        // 숫자가 아닌 값 입력 시 처리
-                        mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
-                    }
+//                    if (charSequence == null || charSequence.toString().trim().isEmpty()) {
+//                        mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
+//                        return;
+//                    }
+//
+//                    try {
+//                        // BigDecimal 생성
+//                        BigDecimal value = new BigDecimal(charSequence.toString());
+//
+//                        // 0보다 큰지 확인
+//                        if (value.compareTo(BigDecimal.ZERO) >= 0) {
+//                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(value); // 값 반영
+//                        }
+//                        else if(item.getRemainingQuantity().floatValue() < value.floatValue()){
+//                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(item.getRemainingQuantity());
+//                        }
+//                        else {
+//                            // 음수 입력 시 처리 (옵션)
+//                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
+//                        }
+//                    } catch (NumberFormatException e) {
+//                        // 숫자가 아닌 값 입력 시 처리
+//                        mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
+//                    }
                     //imm.hideSoftInputFromWindow(holder.tvRemainQty.getWindowToken(), 0);
                 }
 

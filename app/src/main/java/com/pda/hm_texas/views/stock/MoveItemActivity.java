@@ -41,7 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MoveItemActivity extends AppCompatActivity implements View.OnClickListener, OnScanListener, View.OnKeyListener{
+public class MoveItemActivity extends AppCompatActivity implements View.OnClickListener, OnScanListener, View.OnKeyListener {
 
     private Context mContext;
     private IntentFilter filter;
@@ -164,7 +164,7 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
     public boolean onKey(View view, int i, KeyEvent keyEvent) {
 
         if(view.getId() == R.id.etMoveBarcode){
-            if(i == KeyEvent.KEYCODE_ENTER)
+            if((i == KeyEvent.KEYCODE_ENTER) && (keyEvent.getAction() ==  KeyEvent.ACTION_DOWN))
             {
                 SearchItem(etBarcode.getText().toString());
                 return true;

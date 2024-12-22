@@ -33,6 +33,7 @@ import com.pda.hm_texas.dto.ProdOrderDTO;
 import com.pda.hm_texas.dto.ReleaseDTO;
 import com.pda.hm_texas.dto.StockItemDTO;
 import com.pda.hm_texas.event.OnItemClickLintner;
+import com.pda.hm_texas.event.OnItemLongClickListener;
 import com.pda.hm_texas.event.OnScanListener;
 import com.pda.hm_texas.event.ScanReceiver;
 import com.pda.hm_texas.helper.ProdHelper;
@@ -49,7 +50,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProdActivity extends AppCompatActivity implements View.OnClickListener, OnScanListener {
+public class ProdActivity extends AppCompatActivity implements View.OnClickListener, OnScanListener, OnItemLongClickListener, OnItemClickLintner {
 
     private Context mContext;
     private String ProdItemNo, ProdOrderNo ;
@@ -122,6 +123,8 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
         mReciver.SetOnScanListener(this);
 
         mAdapter = new ProdItemAdapter(this);
+        mAdapter.SetOnItemLongClickListiner(this);
+        mAdapter.SetOnQtyChangeListener(this);
         RecyclerView rvList = findViewById(R.id.rvProdItem);
         rvList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         rvList.setAdapter(mAdapter);
@@ -146,6 +149,23 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
 
         // super.onBackPressed();
     }
+
+    @Override
+    public void onItemSelect(View v, int position) {
+
+    }
+
+    @Override
+    public void onItemLongClick(int position) {
+        try{
+            mAdapter.mList.remove(position);
+            mAdapter.notifyDataSetChanged();
+        }
+        catch (Exception ex){
+
+        }
+    }
+
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.btnMatReg)
@@ -276,12 +296,13 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                             if(isSameBcr){
                                 Utility.getInstance().showDialog("Search Scan Lot", "Alredy Scan Item Barcode.", mContext);
                             }
-
-                            for(int i=0; i<response.body().size(); i++){
-                                response.body().get(i).setEmptyCaseQty(new BigDecimal(etEmptyCase.getText().toString()));
+                            else{
+                                for(int i=0; i<response.body().size(); i++){
+                                    response.body().get(i).setEmptyCaseQty(new BigDecimal(etEmptyCase.getText().toString()));
+                                }
+                                mAdapter.mList.addAll(response.body());
+                                mAdapter.notifyDataSetChanged();
                             }
-                            mAdapter.mList.addAll(response.body());
-                            mAdapter.notifyDataSetChanged();
                         }
 
                     }
@@ -302,7 +323,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
 
     private void ReleaseMat(){
         try {
-            progressDialog.show();
+
             boolean iValidation = true;
             if(mAdapter.mList.size() == 0){
                 Utility.getInstance().showDialog("Release", "There are no materials to input.", mContext);
@@ -314,8 +335,18 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                 iValidation = false;
             }
 
+            for(int i=0; i<mAdapter.mList.size(); i++){
+                if(mAdapter.mList.get(i).getRemainingQuantity().floatValue() == 0)
+                {
+                    Utility.getInstance().showDialog("Release", "There are materials with a material registration quantity of 0.", mContext);
+                    iValidation = false;
+                    break;
+                }
+            }
+
             if(iValidation == false) return;
 
+            progressDialog.show();
             List<ReleaseDTO> sendDatas = new ArrayList<>();
 
             for(int i=0; i<mAdapter.mList.size(); i++){
@@ -363,6 +394,8 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                             Utility.getInstance().showDialog("Release", "Success.", mContext);
                             mAdapter.mList.clear();
                             mAdapter.notifyDataSetChanged();
+
+                            etEmptyCase.setText("0");
                         }
                         else{
                             Utility.getInstance().showDialog("Release Fail", response.body().getERR_MSG(), mContext);
@@ -382,4 +415,6 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
             ex.printStackTrace();
         }
     }
+
+
 }
