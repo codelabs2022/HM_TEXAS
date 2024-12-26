@@ -56,7 +56,14 @@ public class RecipeDialog extends Dialog implements OnItemClickLintner, View.OnC
     @Override
     public void onItemSelect(View v, int position) {
         try{
-            ProdHelper.getInstance().setProdComps(mAdapter.SelectItem);
+            if(mAdapter.mList.get(position).getItemNo().equals("20101201")){
+                mAdapter.mList.get(position).setSelect(false);
+                Utility.getInstance().showDialog("Search Recipe", "Recycled materials do not require material input.", mContext);
+            }
+            else{
+                ProdHelper.getInstance().setProdComps(mAdapter.SelectItem);
+            }
+
         }catch (Exception ex){
             ex.printStackTrace();
         }
@@ -66,6 +73,7 @@ public class RecipeDialog extends Dialog implements OnItemClickLintner, View.OnC
     public void onClick(View view) {
         if(view.getId() == R.id.btnSetRecipe){
             try{
+
                 ProdHelper.getInstance().setProdComps(mAdapter.SelectItem);
             }catch (Exception ex){
                 ex.printStackTrace();
@@ -84,6 +92,17 @@ public class RecipeDialog extends Dialog implements OnItemClickLintner, View.OnC
                     if (response.body() == null || response.body().size() == 0) {
                         Utility.getInstance().showDialog("Search Recipe", "No Has Recipe.", mContext);
                     } else {
+
+                        for(ProdCompsDTO item : response.body()){
+                            if(item.getDescription().contains("1차회수")){
+                                item.setDescription(item.getDescription().replace("1차회수", "1st Recovery"));
+                            }
+
+                            if(item.getDescription().contains("2차회수")){
+                                item.setDescription(item.getDescription().replace("2차회수", "2st Recovery"));
+                            }
+                        }
+
                         mAdapter.mList.addAll(response.body());
                         mAdapter.notifyDataSetChanged();
                     }

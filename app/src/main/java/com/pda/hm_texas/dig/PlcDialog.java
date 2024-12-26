@@ -32,7 +32,9 @@ public class PlcDialog extends Dialog implements OnItemClickLintner, View.OnClic
     private ProgressDialog progressDialog;
     private Context mContext;
 
-    public PlcDialog(@NonNull Context context, String item) {
+    private List<PlcMatrailDTO> datas = null;
+
+    public PlcDialog(@NonNull Context context, List<PlcMatrailDTO> items) {
         super(context);
         setContentView(R.layout.dig_plc);
 
@@ -51,7 +53,10 @@ public class PlcDialog extends Dialog implements OnItemClickLintner, View.OnClic
 
         Button btnSelect = findViewById(R.id.btnSetPlc);
 
-        LoadData(item);
+        datas = items;
+        mAdapter.mList.addAll(datas);
+        mAdapter.notifyDataSetChanged();
+        //LoadData(item);
     }
 
     @Override

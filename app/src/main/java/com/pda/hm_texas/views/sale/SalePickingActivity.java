@@ -34,6 +34,7 @@ import com.pda.hm_texas.dto.PickingDTO;
 import com.pda.hm_texas.dto.StockItemDTO;
 import com.pda.hm_texas.event.OnItemClickLintner;
 import com.pda.hm_texas.event.OnItemLongClickListener;
+import com.pda.hm_texas.event.OnMsgBoxClickListener;
 import com.pda.hm_texas.event.OnScanListener;
 import com.pda.hm_texas.event.ScanReceiver;
 import com.pda.hm_texas.helper.LoginUser;
@@ -66,6 +67,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
     private SaleOrderItemAdapter mAdapterLotinStock;
     private ProdItemAdapter mAdapterScanItem;
 
+    private boolean isCheck = true;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +147,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
 
         if(view.getId() == R.id.btnSalePickingReg)
         {
-            SetPicking();
+            CheckPicking();
         }
 
     }
@@ -164,6 +166,15 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
     @Override
     public void onItemLongClick(int position) {
         try{
+
+            for(StockItemDTO stockitem : mAdapterLotinStock.mList){
+                if(stockitem.getBarCode().equals(mAdapterScanItem.mList.get(position).getBarCode())){
+                    stockitem.setSelect(false);
+                    mAdapterLotinStock.notifyDataSetChanged();
+                    break;
+                }
+            }
+
             mAdapterScanItem.mList.remove(position);
             mAdapterScanItem.notifyDataSetChanged();
         }
@@ -306,9 +317,9 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
             ex.printStackTrace();
         }
     }
+    private void CheckPicking(){
+        isCheck = true;
 
-    private void SetPicking(){
-        boolean isCheck = true;
         if(mAdapterScanItem.mList.size() == 0){
             Utility.getInstance().showDialog("Item", "There are no items to Picking.", mContext);
             isCheck = false;
@@ -327,11 +338,29 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
             }
         }
         //String txtTotalPickingQty = tvPickingQty.getText().toString().split(":")[1].trim();
-        if(SaleHelper.getInstance().getOrder().getOrderQty().floatValue() < new BigDecimal(tvPickingQty.getText().toString().split(":")[1].trim()).floatValue()){
-            Utility.getInstance().showDialog("PICKING", "Picked more than the instructed quantity.", mContext);
-            isCheck = false;
-        }
+
         if(!isCheck)return;
+
+        isCheck = true;
+        if(SaleHelper.getInstance().getOrder().getOrderQty().floatValue() < new BigDecimal(tvPickingQty.getText().toString().split(":")[1].trim()).floatValue()){
+            Utility.getInstance().showDialogByConfirm("PICKING", "quantity greater than the specified quantity has been picked. Would you like to register?", mContext, new OnMsgBoxClickListener() {
+                @Override
+                public void OnConfirm() {
+                    isCheck = true;
+                    SetPicking();
+                }
+
+                @Override
+                public void OnCancle() {
+                    isCheck = false;
+                }
+            });
+        }
+        else{
+            SetPicking();
+        }
+    }
+    private void SetPicking(){
 
         progressDialog.show();
 

@@ -53,7 +53,7 @@ public class Utility {
         AlertDialog.Builder msgBuilder = new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(msg)
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //finish();
@@ -70,7 +70,13 @@ public class Utility {
         AlertDialog.Builder msgBuilder = new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(msg)
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        listener.OnCancle();
+                    }
+                })
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         listener.OnConfirm();

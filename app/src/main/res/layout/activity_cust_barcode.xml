@@ -140,7 +140,7 @@
         android:background="@color/colorPrimary"
         android:text="@string/btn_reg"
         android:textColor="@color/white"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
 </LinearLayout>

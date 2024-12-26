@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.pda.hm_texas.R;
 import com.pda.hm_texas.adapter.prod.ProdItemViewHolder;
 import com.pda.hm_texas.dto.StockItemDTO;
+import com.pda.hm_texas.event.OnItemLongClickListener;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,6 +23,12 @@ import java.util.List;
 
 public class SaleOrderItemAdapter  extends RecyclerView.Adapter<SaleLotInStockViewHolder>{
     public List<StockItemDTO> mList;
+
+    private OnItemLongClickListener longClickListener;
+    public void SetOnItemLongClickListiner(OnItemLongClickListener callback)
+    {
+        this.longClickListener = callback;
+    }
 
     public SaleOrderItemAdapter(){
         mList = new ArrayList();
@@ -42,6 +49,13 @@ public class SaleOrderItemAdapter  extends RecyclerView.Adapter<SaleLotInStockVi
     public void onBindViewHolder(@NonNull SaleLotInStockViewHolder holder, @SuppressLint("RecyclerView") int position) {
         try{
             StockItemDTO item = mList.get(position);
+
+            holder.liItem.setOnLongClickListener(v -> {
+                if (longClickListener != null) {
+                    longClickListener.onItemLongClick(position);
+                }
+                return true;
+            });
 
 //            holder.liItem.setOnClickListener(new View.OnClickListener() {
 //                @Override

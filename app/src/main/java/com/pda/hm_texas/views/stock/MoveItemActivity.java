@@ -27,6 +27,7 @@ import com.pda.hm_texas.dig.ProgressDialog;
 import com.pda.hm_texas.dto.DbResultVO;
 import com.pda.hm_texas.dto.LocationDTO;
 import com.pda.hm_texas.dto.StockItemDTO;
+import com.pda.hm_texas.event.OnItemLongClickListener;
 import com.pda.hm_texas.event.OnScanListener;
 import com.pda.hm_texas.event.ScanReceiver;
 import com.pda.hm_texas.helper.LoginUser;
@@ -41,7 +42,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MoveItemActivity extends AppCompatActivity implements View.OnClickListener, OnScanListener, View.OnKeyListener {
+public class MoveItemActivity extends AppCompatActivity implements View.OnClickListener, OnScanListener, View.OnKeyListener, OnItemLongClickListener {
 
     private Context mContext;
     private IntentFilter filter;
@@ -96,6 +97,7 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
         btnMove.setOnClickListener(this);
 
         mAdapter = new SaleOrderItemAdapter();
+        mAdapter.SetOnItemLongClickListiner(this);
         rvItemList = findViewById(R.id.rvMoveItemList);
         rvItemList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         rvItemList.setAdapter(mAdapter);
@@ -177,6 +179,17 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
     public void OnScan(String ScanData) {
 
         SearchItem(ScanData);
+    }
+
+    @Override
+    public void onItemLongClick(int position) {
+        try{
+            mAdapter.mList.remove(position);
+            mAdapter.notifyDataSetChanged();
+        }
+        catch (Exception ex){
+
+        }
     }
 
     private void getLcoation(){
@@ -336,4 +349,6 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
             }
         }
     }
+
+
 }

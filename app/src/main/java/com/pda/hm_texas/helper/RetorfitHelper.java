@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.pda.hm_texas.impl.ApiService;
 
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -17,7 +20,7 @@ public class RetorfitHelper {
     //public static final String USE_URL = "http://1.215.46.190:5701/";
     //public static final String USE_URL = "http://192.168.219.128:5702/";
     //public static final String USE_URL =  "http://192.168.0.24:8080/";
-    public static final String USE_URL =  "http://192.168.10.17:8080/";
+    public static final String USE_URL =  "http://192.168.0.26:8080/";
     //public static final String USE_URL =  "http://4.255.209.126:8080/";
 
 
@@ -31,8 +34,15 @@ public class RetorfitHelper {
     {
         Gson gson = new GsonBuilder().setLenient().create();
 
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS) // 연결 타임아웃 10초
+                .readTimeout(60, TimeUnit.SECONDS)   // 읽기 타임아웃 30초
+                .writeTimeout(60, TimeUnit.SECONDS) // 쓰기 타임아웃 15초
+                .build();
+
         return new Retrofit.Builder()
                 .baseUrl(url)
+                .client(okHttpClient)
                 .addConverterFactory(new NullOnEmptyConverterFactory())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();

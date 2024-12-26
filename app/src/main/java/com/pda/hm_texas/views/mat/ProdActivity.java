@@ -65,6 +65,8 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
     private IntentFilter filter;
     private ScanReceiver mReciver = null;
 
+    private List<PlcMatrailDTO> plcs = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +120,8 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
         filter = new IntentFilter();
         filter.addAction("device.scanner.EVENT");
         filter.addCategory("android.intent.category.DEFAULT");
+
+        plcs = new ArrayList<>();
 
         this.registerReceiver(mReciver, filter);
         mReciver.SetOnScanListener(this);
@@ -184,7 +188,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(View view) {
                     aa.dismiss();
-
+                    LoadPlcData(ProdHelper.getInstance().getProdOrder().getItemNo());
                     //aa.SelectItem
                     tvProdCode.setText(ProdHelper.getInstance().getProdComps().getProdCode());
                     tvItemNo.setText(ProdHelper.getInstance().getProdComps().getItemNo());
@@ -203,7 +207,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
             }
             else{
 
-                PlcDialog bb = new PlcDialog(this, ProdItemNo);
+                PlcDialog bb = new PlcDialog(this, plcs);
                 WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
                 layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                 layoutParams.dimAmount = 0.8f;
@@ -264,6 +268,40 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
         }
         catch (Exception ex){
 
+        }
+    }
+
+    public void LoadPlcData(String itemNo){
+        try {
+            Call<List<PlcMatrailDTO>> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL).getPlcInfo(itemNo);
+            data.enqueue(new Callback<List<PlcMatrailDTO>>() {
+                @Override
+                public void onResponse(Call<List<PlcMatrailDTO>> call, Response<List<PlcMatrailDTO>> response) {
+                    if (response.body() == null || response.body().size() == 0) {
+                       // Utility.getInstance().showDialog("Search Plc", "No Has Plc.", mContext);
+                        ProdHelper.getInstance().setProdPlc(null);
+                    } else {
+                        plcs.clear();
+
+                        for(PlcMatrailDTO dto : response.body()){
+                            if(dto.getMatCodeToItem().equals(ProdHelper.getInstance().getProdComps().getItemNo())){
+                                plcs.add(dto);
+                            }
+                        }
+                        //mAdapter.mList.addAll(response.body());
+                        //mAdapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<PlcMatrailDTO>> call, Throwable t) {
+
+                }
+            });
+        } catch (Exception ex) {
+
+            Utility.getInstance().showDialog("Search Plc", ex.getMessage(), mContext);
+            ex.printStackTrace();
         }
     }
     private void FindStockItem(String barcode){
@@ -344,6 +382,15 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
 
+            if(plcs.size() > 0)
+            {
+                if(ProdHelper.getInstance().getProdPlc() == null)
+                {
+                    Utility.getInstance().showDialog("Release", "There is PLC information that needs to be input..", mContext);
+                    iValidation = false;
+                }
+            }
+
             if(iValidation == false) return;
 
             progressDialog.show();
@@ -396,6 +443,8 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                             mAdapter.notifyDataSetChanged();
 
                             etEmptyCase.setText("0");
+
+                            init();
                         }
                         else{
                             Utility.getInstance().showDialog("Release Fail", response.body().getERR_MSG(), mContext);
