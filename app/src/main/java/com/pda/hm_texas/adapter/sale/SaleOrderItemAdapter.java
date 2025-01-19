@@ -92,7 +92,7 @@ public class SaleOrderItemAdapter  extends RecyclerView.Adapter<SaleLotInStockVi
             holder.tvItemName.setText(item.getDescription());
             holder.tvBarcode.setText(item.getBarCode());
             holder.tvLot.setText(item.getLotNo());
-            holder.tvRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString());
+            holder.tvRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString() + " "+item.getUnitofMeasureCode());
             holder.tvMnf.setText(item.getManufacturingDate());
             holder.tvExp.setText(item.getExpirationDate());
             holder.tvLoc.setText(item.getLocationCode());

@@ -107,6 +107,9 @@ public class ProdItemAdapter extends RecyclerView.Adapter<ProdItemViewHolder>{
             holder.tvItemName.setText(item.getDescription());
             holder.tvBarcode.setText(item.getBarCode());
             holder.tvLot.setText(item.getLotNo());
+            holder.tvMfc.setText(item.getManufacturingDate());
+            holder.tvExp.setText(item.getExpirationDate());
+            holder.tvUnit.setText(item.getUnitofMeasureCode());
             holder.tvRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString());
             holder.tvRemainQty.setOnKeyListener(new View.OnKeyListener() {
                 @Override

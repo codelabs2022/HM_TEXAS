@@ -92,7 +92,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
         tvOrder.setText(ProdHelper.getInstance().getProdOrder().getProdOrderNo());
         tvItem.setText(ProdHelper.getInstance().getProdOrder().getDescription());
         tvLoc.setText(ProdHelper.getInstance().getProdOrder().getLocationCode());
-        tvQty.setText(ProdHelper.getInstance().getProdOrder().getRemainingQuantity().stripTrailingZeros().toPlainString());
+        tvQty.setText(ProdHelper.getInstance().getProdOrder().getRemainingQuantity().stripTrailingZeros().toPlainString() + " "+ ProdHelper.getInstance().getProdOrder().getUnitOfMeasureCode());
 
         Button btnReg = findViewById(R.id.btnMatReg);
         btnReg.setOnClickListener(this::onClick);

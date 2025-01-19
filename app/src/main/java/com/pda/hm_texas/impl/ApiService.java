@@ -60,7 +60,7 @@ public interface ApiService {
     Call<List<SaleOrderDTO>> getSaleOrder(@Query("from") String from, @Query("to") String to, @Query("vender") String vender);
 
     @POST("/pda/sale/stockinlot")
-    Call<List<StockItemDTO>> getSaleLotInStock(@Query("item") String item, @Query("loc") String loc);
+    Call<List<StockItemDTO>> getSaleLotInStock(@Query("ordno") String ordno, @Query("lineno") String lineno, @Query("item") String item, @Query("loc") String loc);
 
     @POST("/pda/sale/finditem")
     Call<List<StockItemDTO>> getSaleFindBarcode(@Query("item") String item, @Query("barcode") String barcode, @Query("loc") String loc);

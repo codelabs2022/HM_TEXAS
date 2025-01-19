@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/groupbox"
     android:orientation="vertical"
-    android:weightSum="2">
+    android:weightSum="3">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,14 +41,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="horizontal"
-        android:weightSum="12">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tvStockItemBarcode"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4.5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center|left"
             android:text="TextView"
             android:textColor="@color/black"
@@ -57,24 +55,60 @@
 
         <TextView
             android:id="@+id/tvStockItemLotNo"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4.5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center|left"
             android:text="TextView"
             android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="12">
+
+        <TextView
+            android:id="@+id/tvStockItemMnf"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:textAlignment="gravity"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvStockItemExp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:textAlignment="gravity"
             android:textSize="14sp"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/etProdQty"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="3"
             android:ems="10"
             android:gravity="center|right"
             android:inputType="numberDecimal"
             android:textColor="@color/blue"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvStockItemUnit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
             android:textSize="14sp"
             android:textStyle="bold" />
     </LinearLayout>

@@ -46,9 +46,22 @@ public class ProdOrderDTO {
     @SerializedName("finishedQuantity")
     @Expose
     private BigDecimal finishedQuantity;
+
     @SerializedName("remainingQuantity")
     @Expose
     private BigDecimal remainingQuantity;
+
+    @SerializedName("unitOfMeasureCode")
+    @Expose
+    private String unitOfMeasureCode;
+
+    public String getUnitOfMeasureCode() {
+        return unitOfMeasureCode;
+    }
+
+    public void setUnitOfMeasureCode(String unitOfMeasureCode) {
+        this.unitOfMeasureCode = unitOfMeasureCode;
+    }
 
     public boolean isSelect() {
         return isSelect;

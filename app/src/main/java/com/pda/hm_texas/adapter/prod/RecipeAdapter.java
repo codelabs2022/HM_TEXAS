@@ -89,8 +89,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder>{
             holder.tvItemNo.setText(item.getItemNo());
             holder.tvItemName.setText(item.getDescription());
             holder.tvloc.setText(item.getCompsLocation());
-            holder.tvNeedQty.setText(item.getExpectedQuantity().stripTrailingZeros().toPlainString());
-            holder.tvRemainQty.setText(item.getReleaseQty().stripTrailingZeros().toPlainString());
+            holder.tvNeedQty.setText(item.getExpectedQuantity().stripTrailingZeros().toPlainString() + " " + item.getUnit());
+            holder.tvRemainQty.setText(item.getReleaseQty().stripTrailingZeros().toPlainString()+ " " + item.getUnit());
         }
         catch (Exception ex){
             ex.printStackTrace();

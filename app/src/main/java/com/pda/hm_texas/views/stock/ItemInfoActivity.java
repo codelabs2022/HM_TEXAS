@@ -90,6 +90,7 @@ public class ItemInfoActivity extends AppCompatActivity implements View.OnClickL
         progressDialog.setCanceledOnTouchOutside(false);
 
         etBarcode = findViewById(R.id.etIfBarcode);
+        etBarcode.setOnKeyListener(this);
 
         mAdapter = new SaleOrderItemAdapter();
         rvItemList = findViewById(R.id.rvSerchItemList);
@@ -144,6 +145,16 @@ public class ItemInfoActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public boolean onKey(View view, int i, KeyEvent keyEvent) {
+
+        if(i == KeyEvent.KEYCODE_ENTER)
+        {
+            if(view.getId() == R.id.etIfBarcode){
+                SearchItem(etBarcode.getText().toString().trim());
+                imm.hideSoftInputFromWindow(etBarcode.getWindowToken(), 0);
+            }
+
+            return true;
+        }
         return false;
     }
 
@@ -199,7 +210,7 @@ public class ItemInfoActivity extends AppCompatActivity implements View.OnClickL
                     if (response.body() == null || response.body().size() == 0) {
                         Utility.getInstance().showDialog("Search Scan Lot", "No Has in Stock.", mContext);
                     } else {
-
+                        mAdapter.mList.clear();
                         mAdapter.mList.addAll(response.body());
                         mAdapter.notifyDataSetChanged();
                     }

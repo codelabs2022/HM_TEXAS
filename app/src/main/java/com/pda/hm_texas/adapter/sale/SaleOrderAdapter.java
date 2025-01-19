@@ -93,9 +93,9 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<OrderViewHolder>{
             holder.tvOrerLineNo.setText(item.getSelltoCustomerName());
             holder.tvItemNo.setText(item.getItemNo());
             holder.tvItemName.setText(item.getDescription());
-            holder.tvOrderQty.setText(item.getOrderQty().stripTrailingZeros().toPlainString());
-            holder.tvOrderProdQty.setText(item.getQtyShipped().stripTrailingZeros().toPlainString());
-            holder.tvOrderRemainQty.setText(item.getQtyToShip().stripTrailingZeros().toPlainString());
+            holder.tvOrderQty.setText(item.getOrderQty().stripTrailingZeros().toPlainString() + " " + item.getUnitofMeasureCode() );
+            holder.tvOrderProdQty.setText(item.getQtyShipped().stripTrailingZeros().toPlainString() + " " + item.getUnitofMeasureCode());
+            holder.tvOrderRemainQty.setText(item.getQtyToShip().stripTrailingZeros().toPlainString()+ " " + item.getUnitofMeasureCode());
         }
         catch (Exception ex){
             ex.printStackTrace();

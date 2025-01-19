@@ -35,6 +35,10 @@ public class ProdCompsDTO {
     @Expose
     private BigDecimal releaseQty;
 
+    @SerializedName("unit")
+    @Expose
+    private String unit;
+
     private boolean isSelect = false;
 
     public String getProdOrderNo() {
@@ -107,6 +111,14 @@ public class ProdCompsDTO {
 
     public void setReleaseQty(BigDecimal releaseQty) {
         this.releaseQty = releaseQty;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public boolean isSelect() {

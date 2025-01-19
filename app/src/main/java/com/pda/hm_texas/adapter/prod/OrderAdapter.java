@@ -90,9 +90,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderViewHolder>{
             holder.tvOrerLineNo.setText(String.valueOf(item.getProdOrderLineNo()));
             holder.tvItemNo.setText(item.getItemNo());
             holder.tvItemName.setText(item.getDescription());
-            holder.tvOrderQty.setText(item.getQuantity().stripTrailingZeros().toPlainString());
-            holder.tvOrderProdQty.setText(item.getFinishedQuantity().stripTrailingZeros().toPlainString());
-            holder.tvOrderRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString());
+            holder.tvOrderQty.setText(item.getQuantity().stripTrailingZeros().toPlainString() + " "+ item.getUnitOfMeasureCode());
+            holder.tvOrderProdQty.setText(item.getFinishedQuantity().stripTrailingZeros().toPlainString()+ " "+ item.getUnitOfMeasureCode());
+            holder.tvOrderRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString()+ " "+ item.getUnitOfMeasureCode());
         }
         catch (Exception ex){
             ex.printStackTrace();

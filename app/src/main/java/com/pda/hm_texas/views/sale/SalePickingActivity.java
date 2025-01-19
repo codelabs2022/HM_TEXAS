@@ -199,7 +199,11 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
         progressDialog.show();
 
         try {
-            Call<List<StockItemDTO>> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL).getSaleLotInStock(SaleHelper.getInstance().getOrder().getItemNo(), SaleHelper.getInstance().getOrder().getLocationCode());
+            Call<List<StockItemDTO>> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL).getSaleLotInStock(
+                                                                                                                    SaleHelper.getInstance().getOrder().getOrderNo(),
+                                                                                                                    SaleHelper.getInstance().getOrder().getLineNo(),
+                                                                                                                    SaleHelper.getInstance().getOrder().getItemNo(),
+                                                                                                                    SaleHelper.getInstance().getOrder().getLocationCode());
             data.enqueue(new Callback<List<StockItemDTO>>() {
                 @Override
                 public void onResponse(Call<List<StockItemDTO>> call, Response<List<StockItemDTO>> response) {
@@ -251,9 +255,18 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                             if(found){
                                 boolean isSameBcr = false;
                                 boolean isNotFirstMat = false;
+                                boolean isNotFindMat = true;
+
                                 for(int k=0; k<mAdapterScanItem.mList.size(); k++){
                                     if(mAdapterScanItem.mList.get(k).getBarCode().equals(response.body().get(0).getBarCode())){
                                         isSameBcr = true;
+                                        break;
+                                    }
+                                }
+
+                                for(int k=0; k<mAdapterLotinStock.mList.size(); k++){
+                                    if(mAdapterLotinStock.mList.get(k).getBarCode().equals(response.body().get(0).getBarCode())){
+                                        isNotFindMat = false;
                                         break;
                                     }
                                 }
@@ -278,6 +291,9 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                                 }
                                 else if(isNotFirstMat == true){
                                     Utility.getInstance().showDialog("Search Scan Lot", "There are LOT products that were produced previously.", mContext);
+                                }
+                                else if(isNotFindMat == true){
+                                    Utility.getInstance().showDialog("Search Scan Lot", "This inventory cannot be picked.", mContext);
                                 }
                                 else{
                                     mAdapterScanItem.mList.add(response.body().get(0));
