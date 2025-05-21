@@ -258,13 +258,14 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
             tvItemNo.setText("");
             tvItemName.setText("");
             tvloc.setText("");
-            tvNeedQty.setText(0);
-            tvRemainQty.setText(0);
+            tvNeedQty.setText("");
+            tvRemainQty.setText("");
 
             tvMat.setText("");
             tvStatus.setText("");
-            tvInput.setText(0);
-            tvApply.setText(0);
+            tvInput.setText("");
+            tvApply.setText("");
+
         }
         catch (Exception ex){
 

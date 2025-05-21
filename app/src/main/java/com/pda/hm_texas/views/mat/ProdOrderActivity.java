@@ -154,6 +154,7 @@ public class ProdOrderActivity extends AppCompatActivity implements View.OnClick
                     if (response.body() == null || response.body().size() == 0) {
                         Utility.getInstance().showDialog("Search Order", "No Has Order.", mContext);
                     } else {
+                        mAdapter.mList.clear();
                         mAdapter.mList.addAll(response.body());
                         mAdapter.notifyDataSetChanged();
                     }

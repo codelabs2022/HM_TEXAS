@@ -396,11 +396,21 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                         Utility.getInstance().showDialog("Picking", "No processing result has been received.", mContext);
                     } else {
                         if(response.body().getERR_CODE().equals("S00")){
-                            Utility.getInstance().showDialog("Picking", "Success.", mContext);
-                            mAdapterScanItem.mList.clear();
-                            mAdapterScanItem.notifyDataSetChanged();
-                            LoadOrderLotInStock();
-                            finish();
+                            Utility.getInstance().showDialogCallBack("Picking", "Success.", mContext, new OnMsgBoxClickListener() {
+                                @Override
+                                public void OnConfirm() {
+                                    mAdapterScanItem.mList.clear();
+                                    mAdapterScanItem.notifyDataSetChanged();
+                                    LoadOrderLotInStock();
+                                    finish();
+                                }
+
+                                @Override
+                                public void OnCancle() {
+
+                                }
+                            });
+
                         }
                         else{
                             Utility.getInstance().showDialog("Picking Fail", "Fail to Resister Picking", mContext);

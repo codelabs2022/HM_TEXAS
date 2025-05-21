@@ -133,7 +133,7 @@
                     android:inputType="number|numberDecimal"
                     android:text="0"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
 

@@ -65,6 +65,26 @@ public class Utility {
         tvmsg.setTextSize(25.0f);
         msgDlg.show();
     }
+
+    public void showDialogCallBack(String title, String msg , Context context, OnMsgBoxClickListener listener) {
+
+        ContextThemeWrapper cw = new ContextThemeWrapper( context, androidx.appcompat.R.style.AlertDialog_AppCompat );
+        AlertDialog.Builder msgBuilder = new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        listener.OnConfirm();
+                    }
+                });
+
+        AlertDialog msgDlg = msgBuilder.show();
+        TextView tvmsg = msgDlg.findViewById(android.R.id.message);
+        tvmsg.setTextSize(25.0f);
+        msgDlg.show();
+    }
+
     public void showDialogByConfirm(String title, String msg , Context context, OnMsgBoxClickListener listener) {
 
         AlertDialog.Builder msgBuilder = new AlertDialog.Builder(context)
