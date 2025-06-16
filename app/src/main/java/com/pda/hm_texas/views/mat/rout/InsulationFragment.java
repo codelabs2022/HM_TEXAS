@@ -84,10 +84,15 @@ public class InsulationFragment extends Fragment implements View.OnClickListener
         Button btnIns1 = view.findViewById(R.id.btnIns1);
         Button btnIns2 = view.findViewById(R.id.btnIns2);
         Button btnIns3 = view.findViewById(R.id.btnIns3);
+        Button btnIns4 = view.findViewById(R.id.btnIns4);
+        Button btnIns5 = view.findViewById(R.id.btnIns5);
+
 
         btnIns1.setOnClickListener(this);
         btnIns2.setOnClickListener(this);
         btnIns3.setOnClickListener(this);
+        btnIns4.setOnClickListener(this);
+        btnIns5.setOnClickListener(this);
 
         return view;
     }
@@ -96,8 +101,10 @@ public class InsulationFragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         String routCode = "";
         if(view.getId() == R.id.btnIns1)routCode = "HAD31";
-        else if(view.getId() == R.id.btnIns2)routCode = "HAS01_HP";
+        else if(view.getId() == R.id.btnIns2)routCode = "HAD30";
         else if(view.getId() == R.id.btnIns3)routCode = "HAS31_HP";
+        else if(view.getId() == R.id.btnIns4)routCode = "HAS01_HP";
+        else if(view.getId() == R.id.btnIns5)routCode = "HAS30_HP";
 
         if (mListener != null) {
             mListener.onButtonClicked(routCode);

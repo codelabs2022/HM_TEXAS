@@ -30,6 +30,8 @@
     <string name="mat_rout_ins1">HAD31</string>
     <string name="mat_rout_ins2">HAS01_HP</string>
     <string name="mat_rout_ins3">HAS31_HP</string>
+    <string name="mat_rout_ins4">HAD30</string>
+    <string name="mat_rout_ins5">HAS30_HP</string>
     <string name="mat_rout_dis1">HPD-01</string>
 
     <string name="mat_order_from">FROM : </string>
