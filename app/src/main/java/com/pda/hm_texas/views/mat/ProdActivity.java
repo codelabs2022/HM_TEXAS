@@ -349,7 +349,8 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
 
                 @Override
                 public void onFailure(Call<List<StockItemDTO>> call, Throwable t) {
-
+                    if (progressDialog.isShowing()) progressDialog.dismiss();
+                    Utility.getInstance().showDialog("Search Barcode", t.getMessage(), mContext);
                 }
             });
         } catch (Exception ex) {
@@ -455,7 +456,8 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
 
                 @Override
                 public void onFailure(Call<DbResultVO> call, Throwable t) {
-
+                    if (progressDialog.isShowing()) progressDialog.dismiss();
+                    Utility.getInstance().showDialog("Search Barcode", t.getMessage(), mContext);
                 }
             });
         } catch (Exception ex) {
