@@ -105,10 +105,69 @@
 <!--            </LinearLayout>-->
 
             <LinearLayout
+                android:id="@+id/llRackMove"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.65"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <ImageView
+                    android:id="@+id/imageView33"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:padding="15dp"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/mount_rack"
+                    tools:ignore="DuplicateIds" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="7.5"
+                    android:orientation="vertical"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/textView44"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="bottom|left"
+                        android:text="@string/menu_rackkmove"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:ignore="DuplicateIds" />
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="top|left"
+                        android:text="@string/menu_rackkmove_desc"
+                        android:textColor="@color/base_text_color"
+                        android:textSize="14sp"
+                        tools:ignore="DuplicateIds" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    app:srcCompat="@drawable/next"
+                    tools:ignore="DuplicateIds" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/llStockMove"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.92"
+                android:layout_weight="1.65"
                 android:orientation="horizontal"
                 android:weightSum="10">
 
@@ -167,7 +226,7 @@
                 android:id="@+id/llPicking"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.92"
+                android:layout_weight="1.65"
                 android:orientation="horizontal"
                 android:weightSum="10">
 
@@ -226,7 +285,7 @@
                 android:id="@+id/llMat"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.92"
+                android:layout_weight="1.65"
                 android:orientation="horizontal"
                 android:weightSum="10">
 
@@ -285,7 +344,7 @@
                 android:id="@+id/llStockList"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.92"
+                android:layout_weight="1.65"
                 android:orientation="horizontal"
                 android:weightSum="10">
 
@@ -344,7 +403,7 @@
                 android:id="@+id/llMapping"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.92"
+                android:layout_weight="1.65"
                 android:orientation="horizontal"
                 android:weightSum="10">
 

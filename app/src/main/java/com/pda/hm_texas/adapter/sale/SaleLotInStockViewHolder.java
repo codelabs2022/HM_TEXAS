@@ -11,7 +11,7 @@ import com.pda.hm_texas.R;
 
 public class SaleLotInStockViewHolder extends RecyclerView.ViewHolder{
     public LinearLayout liItem;
-    public TextView tvItemNo, tvItemName, tvBarcode, tvLot,  tvRemainQty, tvLoc, tvMnf, tvExp;
+    public TextView tvItemNo, tvItemName, tvBarcode, tvLot,  tvRemainQty, tvLoc, tvMnf, tvExp, tvRack;
 
     public SaleLotInStockViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -25,5 +25,6 @@ public class SaleLotInStockViewHolder extends RecyclerView.ViewHolder{
         tvLoc = itemView.findViewById(R.id.tvSaleItemLoc);
         tvMnf = itemView.findViewById(R.id.tvSaleItemMnfDt);
         tvExp = itemView.findViewById(R.id.tvSaleItemExpDt);
+        tvRack = itemView.findViewById(R.id.tvSaleItemLoc);
     }
 }

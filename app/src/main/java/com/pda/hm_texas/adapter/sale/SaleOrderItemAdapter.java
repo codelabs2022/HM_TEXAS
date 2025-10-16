@@ -91,11 +91,11 @@ public class SaleOrderItemAdapter  extends RecyclerView.Adapter<SaleLotInStockVi
             holder.tvItemNo.setText(item.getItemNo());
             holder.tvItemName.setText(item.getDescription());
             holder.tvBarcode.setText(item.getBarCode());
-            holder.tvLot.setText(item.getLotNo());
+            holder.tvLot.setText(item.getLotNo() );
             holder.tvRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString() + " "+item.getUnitofMeasureCode());
             holder.tvMnf.setText(item.getManufacturingDate());
             holder.tvExp.setText(item.getExpirationDate());
-            holder.tvLoc.setText(item.getLocationCode());
+            holder.tvLoc.setText(item.getLocationCode()+ " ::> " + item.getRackCode());
 //            holder.tvRemainQty.addTextChangedListener(new TextWatcher() {
 //                @Override
 //                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

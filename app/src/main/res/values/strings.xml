@@ -16,6 +16,8 @@
     <string name="title_activity_main2">Menu</string>
     <string name="menu_stockin">Product Incoming Registration</string>
     <string name="menu_stockin_desc">Receive and register the product.</string>
+    <string name="menu_rackkmove">Rack Movement</string>
+    <string name="menu_rackkmove_desc">Move Rack between inventory.</string>
     <string name="menu_stockmove">Inventory Movement</string>
     <string name="menu_stockmove_desc">Move inventory between warehouses.</string>
     <string name="menu_picking">Shipping Picking Registration</string>

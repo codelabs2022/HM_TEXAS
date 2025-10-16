@@ -3,11 +3,14 @@ package com.pda.hm_texas.impl;
 import com.pda.hm_texas.dto.AppVersionDTO;
 import com.pda.hm_texas.dto.DbResultVO;
 import com.pda.hm_texas.dto.EnterOrderDTO;
+import com.pda.hm_texas.dto.FactoryDTO;
 import com.pda.hm_texas.dto.LocationDTO;
 import com.pda.hm_texas.dto.PickingDTO;
 import com.pda.hm_texas.dto.PlcMatrailDTO;
 import com.pda.hm_texas.dto.ProdCompsDTO;
 import com.pda.hm_texas.dto.ProdOrderDTO;
+import com.pda.hm_texas.dto.RackDTO;
+import com.pda.hm_texas.dto.RackMoveDTO;
 import com.pda.hm_texas.dto.ReleaseDTO;
 import com.pda.hm_texas.dto.SaleOrderDTO;
 import com.pda.hm_texas.dto.StockItemDTO;
@@ -77,6 +80,22 @@ public interface ApiService {
     @POST("/pda/stock/finditem")
     Call<List<StockItemDTO>> getindBarcode(@Query("item") String item, @Query("barcode") String barcode, @Query("loc") String loc);
 
+    @POST("/pda/stock/findbcr")
+    Call<List<StockItemDTO>> getBarcode(@Query("item") String item, @Query("barcode") String barcode, @Query("loc") String loc);
+
     @POST("/pda/stock/moveitem")
     Call<DbResultVO> MoveItemStock(@Body List<StockItemDTO> items, @Query("loc") String loc, @Query("user") String user, @Query("nowdt") String nowdt);
+
+    @GET("/pda/stock/racklist")
+    Call<List<RackDTO>> getRackList(@Query("loc") String loc);
+
+    @GET("/pda/stock/findrack")
+    Call<RackDTO> getRack(@Query("loc") String loc, @Query("rc") String rackCode);
+
+    @POST("/pda/stock/moverack")
+    Call<DbResultVO> RackMove(@Body List<RackMoveDTO> items);
+
+    @GET("/pda/getfactory")
+    Call<List<FactoryDTO>> getFactory(@Query("fcode") String fcode);
+
 }

@@ -28,6 +28,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".views.stock.rack.CheckMoveRackItemActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.stock.rack.MoveRackActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.stock.MoveItemActivity"
             android:exported="false" />
         <activity
@@ -58,16 +64,14 @@
             android:exported="false" />
         <activity
             android:name=".views.MenuActivity"
-            android:exported="false" >
-        </activity>
-        <!-- <activity -->
+            android:exported="false"></activity> <!-- <activity -->
         <!-- android:name=".views.MainActivity2" -->
         <!-- android:exported="false" -->
         <!-- android:label="@string/title_activity_main2" -->
         <!-- android:theme="@style/Theme.HM_TEXAS" /> -->
         <activity
             android:name=".views.LoginActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -76,9 +80,7 @@
         </activity>
         <activity
             android:name=".views.MainActivity"
-            android:exported="true">
-
-        </activity> <!-- APK 설치를 위한 파일 제공자 -->
+            android:exported="true"></activity> <!-- APK 설치를 위한 파일 제공자 -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

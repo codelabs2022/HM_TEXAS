@@ -125,6 +125,8 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
         rvPickingList.setAdapter(mAdapterScanItem);
 
         LoadOrderLotInStock();
+
+        LoadBarcode("HMP20241115-00001");
     }
 
     @Override

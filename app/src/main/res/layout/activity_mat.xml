@@ -36,12 +36,19 @@
 
     </com.google.android.material.tabs.TabLayout>
 
-    <FrameLayout
-        android:id="@+id/frame"
+<!--    <FrameLayout-->
+<!--        android:id="@+id/frame"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_below="@id/tabs"-->
+<!--        android:layout_weight="8.7"></FrameLayout>-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFactory"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_below="@id/tabs"
-        android:layout_weight="8.7"></FrameLayout>
+        android:layout_margin="5dp"
+        android:layout_weight="8.7" />
 
     <View
         android:id="@+id/view4"

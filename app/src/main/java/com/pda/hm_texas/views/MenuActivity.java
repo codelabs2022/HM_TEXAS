@@ -18,6 +18,7 @@ import com.pda.hm_texas.views.sale.SaleOrderActivity;
 import com.pda.hm_texas.views.stock.CustBarcodeActivity;
 import com.pda.hm_texas.views.stock.ItemInfoActivity;
 import com.pda.hm_texas.views.stock.MoveItemActivity;
+import com.pda.hm_texas.views.stock.rack.CheckMoveRackItemActivity;
 
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -34,6 +35,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         //LinearLayout llStockIn = findViewById(R.id.llStockIn);
+        LinearLayout llRackMove = findViewById(R.id.llRackMove);
         LinearLayout llStockMove = findViewById(R.id.llStockMove);
         LinearLayout llPicking = findViewById(R.id.llPicking);
         LinearLayout llMat = findViewById(R.id.llMat);
@@ -41,6 +43,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         LinearLayout llBarcode = findViewById(R.id.llMapping);
 
         //llStockIn.setOnClickListener(this);
+        llRackMove.setOnClickListener(this);
         llStockMove.setOnClickListener(this);
         llPicking.setOnClickListener(this);
         llMat.setOnClickListener(this);
@@ -81,6 +84,9 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(v.getId() == R.id.llMapping){
             i = new Intent(this, CustBarcodeActivity.class);
+        }
+        else if(v.getId() == R.id.llRackMove){
+            i = new Intent(this, CheckMoveRackItemActivity.class);
         }
 
         if(i != null)startActivity(i);
