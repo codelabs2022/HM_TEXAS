@@ -145,6 +145,7 @@ public class CheckMoveRackItemActivity extends AppCompatActivity implements View
             i.putExtra("LOC", selectedLocation.getCode());
             i.putParcelableArrayListExtra("MOVEITEM", (ArrayList<? extends Parcelable>) mAdapter.mList);
             startActivity(i);
+            finish();
         }
     }
 
