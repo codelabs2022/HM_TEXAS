@@ -126,7 +126,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
 
         LoadOrderLotInStock();
 
-        LoadBarcode("HMP20241115-00001");
+        //LoadBarcode("HMP20250506-00001");
     }
 
     @Override

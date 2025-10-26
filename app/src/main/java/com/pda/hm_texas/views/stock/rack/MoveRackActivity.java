@@ -232,6 +232,8 @@ public class MoveRackActivity extends AppCompatActivity implements View.OnClickL
                             }
                         }
                     }
+
+                    etBarcode.setText("");
                 }
 
                 @Override
@@ -285,10 +287,11 @@ public class MoveRackActivity extends AppCompatActivity implements View.OnClickL
                 if (response.body() == null) {
                     Utility.getInstance().showDialog("Move Item", "No processing result has been received.", mContext);
                 } else {
-                    if(response.body().getERR_CODE().equals("1"))
+                    if(response.body().getERR_CODE().equals("0"))
                     {
                         mMoveItemAdapter.mList.clear();
                         mMoveItemAdapter.notifyDataSetChanged();
+                        etBarcode.setText("");
                         Utility.getInstance().showDialog("Move Item", response.body().getERR_MSG(), mContext);
                     }
                     else{
