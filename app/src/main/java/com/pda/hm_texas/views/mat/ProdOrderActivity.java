@@ -89,6 +89,7 @@ public class ProdOrderActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onDestroy() {
         //ProdHelper.getInstance().setProdOrder(null);
+        Utility.getInstance().stopBlinkingAnimation();
         super.onDestroy();
     }
 
@@ -109,19 +110,19 @@ public class ProdOrderActivity extends AppCompatActivity implements View.OnClick
         }
         else if(view.getId() == R.id.btnProdSearch){
             if(TextUtils.isEmpty(tvFrom.getText())){
-                Utility.getInstance().showDialog("Set From Date", "Please Enter From Date", this);
+                Utility.getInstance().showDialogWithBlinkingEffect("Set From Date", "Please Enter From Date", this);
                 return;
             }
 
             if(TextUtils.isEmpty(tvTo.getText())){
-                Utility.getInstance().showDialog("Set To Date", "Please Enter From Date", this);
+                Utility.getInstance().showDialogWithBlinkingEffect("Set To Date", "Please Enter From Date", this);
                 return;
             }
             SearchOrder();
         }
         else if(view.getId() == R.id.btnMatOrderSet ){
             if(ProdHelper.getInstance().getProdOrder() == null){
-                Utility.getInstance().showDialog("SetOrder", "Please Select Order", this);
+                Utility.getInstance().showDialogWithBlinkingEffect("SetOrder", "Please Select Order", this);
             }
             else{
                 //ProdHelper.getInstance().setProdOrder(mAdapter.SelectItem);
@@ -152,7 +153,7 @@ public class ProdOrderActivity extends AppCompatActivity implements View.OnClick
                     if (progressDialog.isShowing()) progressDialog.dismiss();
 
                     if (response.body() == null || response.body().size() == 0) {
-                        Utility.getInstance().showDialog("Search Order", "No Has Order.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Order", "No Has Order.", mContext);
                     } else {
                         mAdapter.mList.clear();
                         mAdapter.mList.addAll(response.body());
@@ -162,13 +163,14 @@ public class ProdOrderActivity extends AppCompatActivity implements View.OnClick
 
                 @Override
                 public void onFailure(Call<List<ProdOrderDTO>> call, Throwable t) {
-
+                    if(progressDialog.isShowing())progressDialog.dismiss();
+                    Utility.getInstance().showDialogWithBlinkingEffect("Search Order", "Fail to GetData Server.", mContext);
                 }
             });
         } catch (Exception ex) {
             if (progressDialog.isShowing()) progressDialog.dismiss();
 
-            Utility.getInstance().showDialog("Search Order", ex.getMessage(), mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Search Order", ex.getMessage(), mContext);
             ex.printStackTrace();
         }
     }

@@ -101,6 +101,7 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onDestroy() {
         this.unregisterReceiver(mReciver);
+        Utility.getInstance().stopBlinkingAnimation();
         super.onDestroy();
     }
 
@@ -159,7 +160,7 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
             }
         }
         catch (Exception ex){
-            Utility.getInstance().showDialog("Barcode", "Fail to Scan Barcode", mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Barcode", "Fail to Scan Barcode", mContext);
         }
     }
 
@@ -190,7 +191,7 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
 
             if (index.isPresent()) {
                 if (progressDialog.isShowing()) progressDialog.dismiss();
-                Utility.getInstance().showDialog("Mapping", "This is a barcode that has already been used.", mContext);
+                Utility.getInstance().showDialogWithBlinkingEffect("Mapping", "This is a barcode that has already been used.", mContext);
             } else {
                 Call<List<TransBarcodeItemDTO>> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL).getCustStockItemInfo(barcode);
                 data.enqueue(new Callback<List<TransBarcodeItemDTO>>() {
@@ -199,11 +200,11 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
                         if (progressDialog.isShowing()) progressDialog.dismiss();
 
                         if (response.body() == null || response.body().size() == 0) {
-                            Utility.getInstance().showDialog("Search Lot", "No Has in Stock.", mContext);
+                            Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "No Has in Stock.", mContext);
                         } else {
                             if(response.body().size() > 1)
                             {
-                                Utility.getInstance().showDialog("Search Lot", "One or more inventory information was found.", mContext);
+                                Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "One or more inventory information was found.", mContext);
                                 etBarcode.setText("");
                             }
                             else
@@ -217,7 +218,7 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
                     @Override
                     public void onFailure(Call<List<TransBarcodeItemDTO>> call, Throwable t) {
                         if (progressDialog.isShowing()) progressDialog.dismiss();
-                        Utility.getInstance().showDialog("Search Lot", "Fail to GetData Server.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "Fail to GetData Server.", mContext);
                         etBarcode.setText("");
                     }
                 });
@@ -225,7 +226,7 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
         } catch (Exception ex) {
             if (progressDialog.isShowing()) progressDialog.dismiss();
 
-            Utility.getInstance().showDialog("Search Lot", ex.getMessage(), mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", ex.getMessage(), mContext);
             ex.printStackTrace();
             etBarcode.setText("");
         }
@@ -240,7 +241,7 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
                     .findFirst();
 
             if (index.isPresent()) {
-                Utility.getInstance().showDialog("Mapping", "This is a customer barcode that has already been used.", mContext);
+                Utility.getInstance().showDialogWithBlinkingEffect("Mapping", "This is a customer barcode that has already been used.", mContext);
                 etCustBarcode.setText("");
             } else {
                 if(nowScanItem != null){
@@ -258,7 +259,7 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
         } catch (Exception ex) {
             if (progressDialog.isShowing()) progressDialog.dismiss();
 
-            Utility.getInstance().showDialog("Search Lot", ex.getMessage(), mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", ex.getMessage(), mContext);
             ex.printStackTrace();
         }
     }
@@ -275,7 +276,7 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
                         if (progressDialog.isShowing()) progressDialog.dismiss();
 
                         if (response.body() == null ) {
-                            Utility.getInstance().showDialog("Mapping", "No Has in Stock.", mContext);
+                            Utility.getInstance().showDialogWithBlinkingEffect("Mapping", "No Has in Stock.", mContext);
                         } else {
                             if(response.body().getERR_CODE().equals("S00"))
                             {
@@ -289,7 +290,7 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
                             }
                             else
                             {
-                                Utility.getInstance().showDialog("Mapping", "Customer barcode mapping failed.", mContext);
+                                Utility.getInstance().showDialogWithBlinkingEffect("Mapping", "Customer barcode mapping failed.", mContext);
                             }
                         }
                     }
@@ -297,13 +298,13 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
                     @Override
                     public void onFailure(Call<DbResultVO> call, Throwable t) {
                         if (progressDialog.isShowing()) progressDialog.dismiss();
-                        Utility.getInstance().showDialog("Mapping", "Fail to GetData Server.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Mapping", "Fail to GetData Server.", mContext);
                     }
                 });
             } catch (Exception ex) {
                 if (progressDialog.isShowing()) progressDialog.dismiss();
 
-                Utility.getInstance().showDialog("Mapping", ex.getMessage(), mContext);
+                Utility.getInstance().showDialogWithBlinkingEffect("Mapping", ex.getMessage(), mContext);
                 ex.printStackTrace();
             }
         }

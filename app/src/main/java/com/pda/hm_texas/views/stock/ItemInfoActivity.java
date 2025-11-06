@@ -121,6 +121,7 @@ public class ItemInfoActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onDestroy() {
         this.unregisterReceiver(mReciver);
+        Utility.getInstance().stopBlinkingAnimation();
         super.onDestroy();
     }
 
@@ -169,7 +170,7 @@ public class ItemInfoActivity extends AppCompatActivity implements View.OnClickL
                     if (progressDialog.isShowing()) progressDialog.dismiss();
 
                     if (response.body() == null ) {
-                        Utility.getInstance().showDialog("Search Stock", "No Has in Location.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Stock", "No Has in Location.", mContext);
                     } else {
 
                         mLocations.clear();
@@ -186,13 +187,13 @@ public class ItemInfoActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onFailure(Call<List<LocationDTO>> call, Throwable t) {
                     if (progressDialog.isShowing()) progressDialog.dismiss();
-                    Utility.getInstance().showDialog("Search Stock", "Fail to GetData Server.", mContext);
+                    Utility.getInstance().showDialogWithBlinkingEffect("Search Stock", "Fail to GetData Server.", mContext);
                 }
             });
         } catch (Exception ex) {
             if (progressDialog.isShowing()) progressDialog.dismiss();
 
-            Utility.getInstance().showDialog("Search Stock", ex.getMessage(), mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Search Stock", ex.getMessage(), mContext);
             ex.printStackTrace();
         }
     }
@@ -208,7 +209,7 @@ public class ItemInfoActivity extends AppCompatActivity implements View.OnClickL
                     if (progressDialog.isShowing()) progressDialog.dismiss();
                     mAdapter.mList.clear();
                     if (response.body() == null || response.body().size() == 0) {
-                        Utility.getInstance().showDialog("Search Scan Lot", "No Has in Stock.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "No Has in Stock.", mContext);
                     } else {
                         mAdapter.mList.clear();
                         mAdapter.mList.addAll(response.body());
@@ -219,13 +220,13 @@ public class ItemInfoActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onFailure(Call<List<StockItemDTO>> call, Throwable t) {
                     if (progressDialog.isShowing()) progressDialog.dismiss();
-                    Utility.getInstance().showDialog("Search Scan Lot", "Fail to GetData Server.", mContext);
+                    Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "Fail to GetData Server.", mContext);
                 }
             });
         } catch (Exception ex) {
             if (progressDialog.isShowing()) progressDialog.dismiss();
 
-            Utility.getInstance().showDialog("Search Scan Lot", ex.getMessage(), mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", ex.getMessage(), mContext);
             ex.printStackTrace();
         }
     }

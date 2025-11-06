@@ -84,6 +84,7 @@ public class MatActivity extends AppCompatActivity implements TabLayout.OnTabSel
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Utility.getInstance().stopBlinkingAnimation();
     }
 
     @Override
@@ -165,7 +166,7 @@ public class MatActivity extends AppCompatActivity implements TabLayout.OnTabSel
                     if (progressDialog.isShowing()) progressDialog.dismiss();
 
                     if(response.body() == null || response.body().size() == 0) {
-                        Utility.getInstance().showDialog("Search Factory", "No Has Factory.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Factory", "No Has Factory.", mContext);
                     }
                     else{
                         mFactoryList.addAll(response.body());
@@ -176,14 +177,14 @@ public class MatActivity extends AppCompatActivity implements TabLayout.OnTabSel
                 @Override
                 public void onFailure(Call<List<FactoryDTO>> call, Throwable t) {
                     if (progressDialog.isShowing()) progressDialog.dismiss();
-                    Utility.getInstance().showDialog("Search Factory", t.getMessage(), mContext);
+                    Utility.getInstance().showDialogWithBlinkingEffect("Search Factory", t.getMessage(), mContext);
                 }
             });
 
         } catch (Exception e) {
             if (progressDialog.isShowing()) progressDialog.dismiss();
 
-            Utility.getInstance().showDialog("Search Factory", e.getMessage(), mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Search Factory", e.getMessage(), mContext);
             e.printStackTrace();
         }
     }

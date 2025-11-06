@@ -133,6 +133,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
     protected void onDestroy() {
         this.unregisterReceiver(mReciver);
         SaleHelper.getInstance().setOrder(null);
+        Utility.getInstance().stopBlinkingAnimation();
         super.onDestroy();
     }
 
@@ -157,7 +158,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
     @Override
     public void OnScan(String ScanData) {
         if(mAdapterLotinStock.mList.size() == 0){
-            Utility.getInstance().showDialog("Search Lot", "There are no items available for export.", mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "There are no items available for export.", mContext);
         }
         else{
             imm.hideSoftInputFromWindow(rvLotList.getWindowToken(), 0);
@@ -212,7 +213,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                     if (progressDialog.isShowing()) progressDialog.dismiss();
 
                     if (response.body() == null || response.body().size() == 0) {
-                        Utility.getInstance().showDialog("Search Lot", "No Has in Stock.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "No Has in Stock.", mContext);
                     } else {
                         mAdapterLotinStock.mList.clear();
                         mAdapterLotinStock.mList.addAll(response.body());
@@ -223,13 +224,13 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                 @Override
                 public void onFailure(Call<List<StockItemDTO>> call, Throwable t) {
                     if (progressDialog.isShowing()) progressDialog.dismiss();
-                    Utility.getInstance().showDialog("Search Lot", "Fail to GetData Server.", mContext);
+                    Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "Fail to GetData Server.", mContext);
                 }
             });
         } catch (Exception ex) {
             if (progressDialog.isShowing()) progressDialog.dismiss();
 
-            Utility.getInstance().showDialog("Search Lot", ex.getMessage(), mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", ex.getMessage(), mContext);
             ex.printStackTrace();
         }
     }
@@ -245,10 +246,10 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                     if (progressDialog.isShowing()) progressDialog.dismiss();
 
                     if (response.body() == null || response.body().size() == 0) {
-                        Utility.getInstance().showDialog("Search Scan Lot", "No Has in Stock.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "No Has in Stock.", mContext);
                     } else {
                         if(response.body().size() > 1){
-                            Utility.getInstance().showDialog("Search Scan Lot", "Two or more items were found.", mContext);
+                            Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "Two or more items were found.", mContext);
                         }
                         else{
 
@@ -289,13 +290,13 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                                 }
 
                                 if(isSameBcr == true ){
-                                    Utility.getInstance().showDialog("Search Scan Lot", "Alredy Scan Item Barcode.", mContext);
+                                    Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "Alredy Scan Item Barcode.", mContext);
                                 }
                                 else if(isNotFirstMat == true){
-                                    Utility.getInstance().showDialog("Search Scan Lot", "There are LOT products that were produced previously.", mContext);
+                                    Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "There are LOT products that were produced previously.", mContext);
                                 }
                                 else if(isNotFindMat == true){
-                                    Utility.getInstance().showDialog("Search Scan Lot", "This inventory cannot be picked.", mContext);
+                                    Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "This inventory cannot be picked.", mContext);
                                 }
                                 else{
                                     mAdapterScanItem.mList.add(response.body().get(0));
@@ -316,7 +317,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                                 }
                             }
                             else{
-                                Utility.getInstance().showDialog("Search Scan Lot", "The scanned item is not on the list of available items for shipment.", mContext);
+                                Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "The scanned item is not on the list of available items for shipment.", mContext);
                             }
                         }
                     }
@@ -325,13 +326,13 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                 @Override
                 public void onFailure(Call<List<StockItemDTO>> call, Throwable t) {
                     if (progressDialog.isShowing()) progressDialog.dismiss();
-                    Utility.getInstance().showDialog("Search Scan Lot", "Fail to GetData Server.", mContext);
+                    Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "Fail to GetData Server.", mContext);
                 }
             });
         } catch (Exception ex) {
             if (progressDialog.isShowing()) progressDialog.dismiss();
 
-            Utility.getInstance().showDialog("Search Scan Lot", ex.getMessage(), mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", ex.getMessage(), mContext);
             ex.printStackTrace();
         }
     }
@@ -339,18 +340,18 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
         isCheck = true;
 
         if(mAdapterScanItem.mList.size() == 0){
-            Utility.getInstance().showDialog("Item", "There are no items to Picking.", mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Item", "There are no items to Picking.", mContext);
             isCheck = false;
         }
 
         for(StockItemDTO dto : mAdapterScanItem.mList){
             if(dto.getRemainingQuantity().floatValue() == 0){
-                Utility.getInstance().showDialog("Item", "There are items with quantities of 0 or not entered.", mContext);
+                Utility.getInstance().showDialogWithBlinkingEffect("Item", "There are items with quantities of 0 or not entered.", mContext);
                 isCheck = false;
                 break;
             }
             if(dto.getRemainingQuantity() == null){
-                Utility.getInstance().showDialog("Item", "There are items with quantities of 0 or not entered.", mContext);
+                Utility.getInstance().showDialogWithBlinkingEffect("Item", "There are items with quantities of 0 or not entered.", mContext);
                 isCheck = false;
                 break;
             }
@@ -395,7 +396,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                     if (progressDialog.isShowing()) progressDialog.dismiss();
 
                     if (response.body() == null ) {
-                        Utility.getInstance().showDialog("Picking", "No processing result has been received.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Picking", "No processing result has been received.", mContext);
                     } else {
                         if(response.body().getERR_CODE().equals("S00")){
                             Utility.getInstance().showDialogCallBack("Picking", "Success.", mContext, new OnMsgBoxClickListener() {
@@ -415,7 +416,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
 
                         }
                         else{
-                            Utility.getInstance().showDialog("Picking Fail", "Fail to Resister Picking", mContext);
+                            Utility.getInstance().showDialogWithBlinkingEffect("Picking Fail", "Fail to Resister Picking", mContext);
                         }
                     }
                 }
@@ -423,13 +424,13 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                 @Override
                 public void onFailure(Call<DbResultVO> call, Throwable t) {
                     if (progressDialog.isShowing()) progressDialog.dismiss();
-                    Utility.getInstance().showDialog("Picking", "Fail to GetData Server.", mContext);
+                    Utility.getInstance().showDialogWithBlinkingEffect("Picking", "Fail to GetData Server.", mContext);
                 }
             });
         } catch (Exception ex) {
             if (progressDialog.isShowing()) progressDialog.dismiss();
 
-            Utility.getInstance().showDialog("Picking", ex.getMessage(), mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Picking", ex.getMessage(), mContext);
             ex.printStackTrace();
         }
     }

@@ -134,6 +134,7 @@ public class MoveRackActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onDestroy() {
         this.unregisterReceiver(mReciver);
+        Utility.getInstance().stopBlinkingAnimation();
         super.onDestroy();
     }
 
@@ -186,7 +187,7 @@ public class MoveRackActivity extends AppCompatActivity implements View.OnClickL
                     if (progressDialog.isShowing()) progressDialog.dismiss();
 
                     if (response.body() == null || response.body().size() == 0) {
-                        Utility.getInstance().showDialog("Search Rack", "No Has in Rack.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Rack", "No Has in Rack.", mContext);
                     }
                     else {
                         mRackListAdapter.mList.clear();
@@ -198,7 +199,7 @@ public class MoveRackActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onFailure(Call<List<RackDTO>> call, Throwable t) {
                     if (progressDialog.isShowing()) progressDialog.dismiss();
-                    Utility.getInstance().showDialog("Search Rack", "Fail to GetData Server.", mContext);
+                    Utility.getInstance().showDialogWithBlinkingEffect("Search Rack", "Fail to GetData Server.", mContext);
                 }
             });
         }
@@ -219,7 +220,7 @@ public class MoveRackActivity extends AppCompatActivity implements View.OnClickL
                     if (progressDialog.isShowing()) progressDialog.dismiss();
 
                     if (response.body() == null || response.body().toString().equals("")) {
-                        Utility.getInstance().showDialog("Search Rack", "No Has in Rack.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Rack", "No Has in Rack.", mContext);
                     }
                     else {
                         for (RackDTO rack : mRackListAdapter.mList) {
@@ -239,7 +240,7 @@ public class MoveRackActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onFailure(Call<RackDTO> call, Throwable t) {
                     if (progressDialog.isShowing()) progressDialog.dismiss();
-                    Utility.getInstance().showDialog("Search Rack", "Fail to GetData Server.", mContext);
+                    Utility.getInstance().showDialogWithBlinkingEffect("Search Rack", "Fail to GetData Server.", mContext);
                 }
             });
         }
@@ -252,11 +253,11 @@ public class MoveRackActivity extends AppCompatActivity implements View.OnClickL
     private void SetRack() {
 
         if(mRackListAdapter.getSetRack() == null){
-            Utility.getInstance().showDialog("RackMove", "Please Set Rack.", mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("RackMove", "Please Set Rack.", mContext);
             return;
         }
         if(mRackListAdapter.mList.isEmpty()){
-            Utility.getInstance().showDialog("RackMove", "There is no stock to move.", mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("RackMove", "There is no stock to move.", mContext);
             return;
         }
 
@@ -285,7 +286,7 @@ public class MoveRackActivity extends AppCompatActivity implements View.OnClickL
                 if (progressDialog.isShowing()) progressDialog.dismiss();
 
                 if (response.body() == null) {
-                    Utility.getInstance().showDialog("Move Item", "No processing result has been received.", mContext);
+                    Utility.getInstance().showDialogWithBlinkingEffect("Move Item", "No processing result has been received.", mContext);
                 } else {
                     if(response.body().getERR_CODE().equals("0"))
                     {
@@ -295,7 +296,7 @@ public class MoveRackActivity extends AppCompatActivity implements View.OnClickL
                         Utility.getInstance().showDialog("Move Item", response.body().getERR_MSG(), mContext);
                     }
                     else{
-                        Utility.getInstance().showDialog("Move Item", response.body().getERR_MSG(), mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Move Item", response.body().getERR_MSG(), mContext);
                     }
                 }
             }
@@ -303,7 +304,7 @@ public class MoveRackActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onFailure(Call<DbResultVO> call, Throwable t) {
                 if (progressDialog.isShowing()) progressDialog.dismiss();
-                Utility.getInstance().showDialog("Move Item", t.getMessage(), mContext);
+                Utility.getInstance().showDialogWithBlinkingEffect("Move Item", t.getMessage(), mContext);
             }
         });
 

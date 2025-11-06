@@ -73,8 +73,8 @@ public class RecipeDialog extends Dialog implements OnItemClickLintner, View.OnC
     public void onClick(View view) {
         if(view.getId() == R.id.btnSetRecipe){
             try{
-
                 ProdHelper.getInstance().setProdComps(mAdapter.SelectItem);
+
             }catch (Exception ex){
                 ex.printStackTrace();
             }

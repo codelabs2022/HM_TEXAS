@@ -145,6 +145,7 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
     protected void onDestroy() {
         this.unregisterReceiver(mReciver);
         super.onDestroy();
+        Utility.getInstance().stopBlinkingAnimation();
     }
 
     @Override
@@ -203,7 +204,7 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
                     if (progressDialog.isShowing()) progressDialog.dismiss();
 
                     if (response.body() == null ) {
-                        Utility.getInstance().showDialog("Search Stock", "No Has in Location.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Stock", "No Has in Location.", mContext);
                     } else {
 
                         mLocations.clear();
@@ -217,20 +218,20 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onFailure(Call<List<LocationDTO>> call, Throwable t) {
                     if (progressDialog.isShowing()) progressDialog.dismiss();
-                    Utility.getInstance().showDialog("Search Stock", "Fail to GetData Server.", mContext);
+                    Utility.getInstance().showDialogWithBlinkingEffect("Search Stock", "Fail to GetData Server.", mContext);
                 }
             });
         } catch (Exception ex) {
             if (progressDialog.isShowing()) progressDialog.dismiss();
 
-            Utility.getInstance().showDialog("Search Stock", ex.getMessage(), mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Search Stock", ex.getMessage(), mContext);
             ex.printStackTrace();
         }
     }
     private void SearchItem(String barcode){
         if(selectedFromLocation == null)
         {
-            Utility.getInstance().showDialog("Location", "Please select a From location.", mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Location", "Please select a From location.", mContext);
         }
         else{
             progressDialog.show();
@@ -243,10 +244,10 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
                         if (progressDialog.isShowing()) progressDialog.dismiss();
 
                         if (response.body() == null || response.body().size() == 0) {
-                            Utility.getInstance().showDialog("Search Scan Lot", "No Has in Stock.", mContext);
+                            Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "No Has in Stock.", mContext);
                         } else {
                             if(response.body().size() > 1){
-                                Utility.getInstance().showDialog("Search Scan Lot", "Two or more items were found.", mContext);
+                                Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "Two or more items were found.", mContext);
                             }
                             else{
                                 boolean isSameBcr = false;
@@ -261,7 +262,7 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
                                     mAdapter.notifyDataSetChanged();
                                 }
                                 else{
-                                    Utility.getInstance().showDialog("Search Scan Lot", "Alredy Scan Item Barcode.", mContext);
+                                    Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "Alredy Scan Item Barcode.", mContext);
                                     etBarcode.setText("");
                                 }
                             }
@@ -272,13 +273,13 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onFailure(Call<List<StockItemDTO>> call, Throwable t) {
                         if (progressDialog.isShowing()) progressDialog.dismiss();
-                        Utility.getInstance().showDialog("Search Scan Lot", "Fail to GetData Server.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "Fail to GetData Server.", mContext);
                     }
                 });
             } catch (Exception ex) {
                 if (progressDialog.isShowing()) progressDialog.dismiss();
 
-                Utility.getInstance().showDialog("Search Scan Lot", ex.getMessage(), mContext);
+                Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", ex.getMessage(), mContext);
                 ex.printStackTrace();
             }
         }
@@ -288,12 +289,12 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
         boolean isCheck = true;
 
         if(mAdapter.mList.size() == 0){
-            Utility.getInstance().showDialog("Item", "There are no items to move.", mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Item", "There are no items to move.", mContext);
             isCheck = false;
         }
 
         if(selectedToLocation.getCode().equals(selectedFromLocation.getCode())){
-            Utility.getInstance().showDialog("Location", "The warehouse before and after moving are the same.", mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Location", "The warehouse before and after moving are the same.", mContext);
             isCheck = false;
         }
 
@@ -301,7 +302,7 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
 
         if(selectedToLocation == null)
         {
-            Utility.getInstance().showDialog("Location", "Please select a To location.", mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Location", "Please select a To location.", mContext);
         }
         else{
             progressDialog.show();
@@ -315,7 +316,7 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
                         if (progressDialog.isShowing()) progressDialog.dismiss();
 
                         if (response.body() == null) {
-                            Utility.getInstance().showDialog("Move Item", "No processing result has been received.", mContext);
+                            Utility.getInstance().showDialogWithBlinkingEffect("Move Item", "No processing result has been received.", mContext);
                         } else {
                             if(response.body().getERR_CODE().equals("1"))
                             {
@@ -324,7 +325,7 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
                                 Utility.getInstance().showDialog("Move Item", "Success.", mContext);
                             }
                             else{
-                                Utility.getInstance().showDialog("Move Item", response.body().getERR_MSG(), mContext);
+                                Utility.getInstance().showDialogWithBlinkingEffect("Move Item", response.body().getERR_MSG(), mContext);
                             }
                         }
                     }
@@ -332,7 +333,7 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onFailure(Call<DbResultVO> call, Throwable t) {
                         if (progressDialog.isShowing()) progressDialog.dismiss();
-                        Utility.getInstance().showDialog("Move Item", t.getMessage(), mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Move Item", t.getMessage(), mContext);
 
                         mAdapter.mList.clear();
                         mAdapter.notifyDataSetChanged();
@@ -341,7 +342,7 @@ public class MoveItemActivity extends AppCompatActivity implements View.OnClickL
             } catch (Exception ex) {
                 if (progressDialog.isShowing()) progressDialog.dismiss();
 
-                Utility.getInstance().showDialog("Move Item", ex.getMessage(), mContext);
+                Utility.getInstance().showDialogWithBlinkingEffect("Move Item", ex.getMessage(), mContext);
                 ex.printStackTrace();
 
                 mAdapter.mList.clear();

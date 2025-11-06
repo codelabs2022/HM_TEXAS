@@ -53,6 +53,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Utility.getInstance().stopBlinkingAnimation();
     }
 
     @Override
@@ -90,6 +91,6 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if(i != null)startActivity(i);
-        else Utility.getInstance().showDialog("MENU", "It's being prepared.", this);
+        else Utility.getInstance().showDialogWithBlinkingEffect("MENU", "It's being prepared.", this);
     }
 }

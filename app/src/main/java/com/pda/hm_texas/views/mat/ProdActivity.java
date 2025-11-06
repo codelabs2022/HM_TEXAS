@@ -188,14 +188,22 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(View view) {
                     aa.dismiss();
-                    LoadPlcData(ProdHelper.getInstance().getProdOrder().getItemNo());
-                    //aa.SelectItem
-                    tvProdCode.setText(ProdHelper.getInstance().getProdComps().getProdCode());
-                    tvItemNo.setText(ProdHelper.getInstance().getProdComps().getItemNo());
-                    tvItemName.setText(ProdHelper.getInstance().getProdComps().getDescription());
-                    tvloc.setText(ProdHelper.getInstance().getProdComps().getCompsLocation());
-                    tvNeedQty.setText(ProdHelper.getInstance().getProdComps().getExpectedQuantity().stripTrailingZeros().toPlainString());
-                    tvRemainQty.setText(ProdHelper.getInstance().getProdComps().getReleaseQty().stripTrailingZeros().toPlainString());
+                    if(ProdHelper.getInstance().getProdComps() == null)
+                    {
+                        Utility.getInstance().showDialog("Search Recipe", "There are no recipes to select.", mContext);
+                    }
+                    else
+                    {
+                        LoadPlcData(ProdHelper.getInstance().getProdOrder().getItemNo());
+                        //aa.SelectItem
+                        tvProdCode.setText(ProdHelper.getInstance().getProdComps().getProdCode());
+                        tvItemNo.setText(ProdHelper.getInstance().getProdComps().getItemNo());
+                        tvItemName.setText(ProdHelper.getInstance().getProdComps().getDescription());
+                        tvloc.setText(ProdHelper.getInstance().getProdComps().getCompsLocation());
+                        tvNeedQty.setText(ProdHelper.getInstance().getProdComps().getExpectedQuantity().stripTrailingZeros().toPlainString());
+                        tvRemainQty.setText(ProdHelper.getInstance().getProdComps().getReleaseQty().stripTrailingZeros().toPlainString());
+                    }
+
                 }
             });
 

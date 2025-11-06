@@ -1,16 +1,24 @@
 package com.pda.hm_texas.helper;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import com.pda.hm_texas.R;
 import com.pda.hm_texas.event.OnMsgBoxClickListener;
 
 import java.net.Inet4Address;
@@ -46,6 +54,9 @@ public class Utility {
     }
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    private ValueAnimator colorAnimator;
+    private AlertDialog alertDialog;
 
     public void showDialog(String title, String msg , Context context) {
 
@@ -109,6 +120,68 @@ public class Utility {
 //        tvmsg.setTextSize(20.0f);
         msgDlg.show();
     }
+
+    public void stopBlinkingAnimation() {
+        if (colorAnimator != null && colorAnimator.isRunning()) {
+            colorAnimator.cancel();
+        }
+    }
+
+    public void showDialogWithBlinkingEffect(String title, String message, Context context) {
+
+        // 애니메이션이 이미 실행 중이라면 중지
+        stopBlinkingAnimation();
+
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.dig_warning, null);
+
+        LinearLayout blinkingArea = dialogView.findViewById(R.id.blinking_area);
+        Button closeButton = dialogView.findViewById(R.id.btn_close);
+        TextView titleTextView = dialogView.findViewById(R.id.dialog_title);
+        TextView messageTextView = dialogView.findViewById(R.id.dialog_message);
+
+        // 내용 설정
+        titleTextView.setText("🚨 " +title);
+        messageTextView.setText(message);
+
+        // AlertDialog 생성 및 설정 (생략된 세부 설정은 이전 답변 참고)
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(dialogView);
+        alertDialog = builder.create();
+
+        if (alertDialog.getWindow() != null) {
+            alertDialog.setCanceledOnTouchOutside(false);
+        }
+
+        // 깜빡임 애니메이션 설정 및 시작
+        colorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(),
+                Color.parseColor("#FFDADA"), Color.parseColor("#FFFFFF"));
+        colorAnimator.setDuration(500);
+        colorAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        colorAnimator.setRepeatCount(ValueAnimator.INFINITE);
+
+        colorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                blinkingArea.setBackgroundColor((int) animator.getAnimatedValue());
+            }
+        });
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopBlinkingAnimation();
+                alertDialog.dismiss();
+
+            }
+        });
+
+        alertDialog.setOnDismissListener(dialog -> stopBlinkingAnimation());
+
+        colorAnimator.start();
+        alertDialog.show();
+    }
+
     public String getToday(){
         LocalDate now = LocalDate.now();         // 포맷 정의
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

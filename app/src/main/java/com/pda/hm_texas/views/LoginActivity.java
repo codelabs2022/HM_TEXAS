@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         catch (Exception ex){
             if(progressDialog.isShowing())progressDialog.dismiss();
-            Utility.getInstance().showDialog("Check Version", ex.getMessage(), mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Check Version", ex.getMessage(), mContext);
         }
     }
 
@@ -184,14 +184,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(etLoginID.getText().toString().equals("") || etLoginID.getText() == null){
             if( progressDialog.isShowing() == true) progressDialog.dismiss();
 
-            Utility.getInstance().showDialog("LOGIN", "Please enter your ID.", mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("LOGIN", "Please enter your ID.", mContext);
             return;
         }
 
         if(etLoginPW.getText().toString().equals("") || etLoginPW.getText() == null){
             if( progressDialog.isShowing() == true) progressDialog.dismiss();
 
-            Utility.getInstance().showDialog("LOGIN", "Please enter your PASSWORD.", mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("LOGIN", "Please enter your PASSWORD.", mContext);
             return;
         }
 
@@ -224,18 +224,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             finish();
                         }
                         else {
-                            Utility.getInstance().showDialog("Login", "Contact your administrator", mContext);
+                            Utility.getInstance().showDialogWithBlinkingEffect("Login", "Contact your administrator", mContext);
                         }
                     }
                     else{
-                        Utility.getInstance().showDialog("Login", "Communication with the server failed.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Login", "Communication with the server failed.", mContext);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<UserDTO> call, Throwable t) {
                     if(progressDialog.isShowing()) progressDialog.dismiss();
-                    Utility.getInstance().showDialog("Login", "Communication with the server failed.", mContext);
+                    Utility.getInstance().showDialogWithBlinkingEffect("Login", "Communication with the server failed.", mContext);
                 }
             });
         }catch (Exception e){
@@ -246,6 +246,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Utility.getInstance().stopBlinkingAnimation();
     }
 
     @Override
