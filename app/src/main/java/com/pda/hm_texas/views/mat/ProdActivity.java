@@ -192,7 +192,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                     aa.dismiss();
                     if(ProdHelper.getInstance().getProdComps() == null)
                     {
-                        Utility.getInstance().showDialog("Search Recipe", "There are no recipes to select.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Recipe", "There are no recipes to select.", mContext);
                     }
                     else
                     {
@@ -215,7 +215,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(view.getId() == R.id.btnPopupPlc){
             if(ProdHelper.getInstance().getProdComps() == null){
-                Utility.getInstance().showDialog("Release", "Please select the recipe you wish to input.", mContext);
+                Utility.getInstance().showDialogWithBlinkingEffect("Release", "Please select the recipe you wish to input.", mContext);
             }
             else{
 
@@ -249,7 +249,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void OnScan(String ScanData) {
         if(ProdHelper.getInstance().getProdComps() == null){
-            Utility.getInstance().showDialog("Search Recipe", "Please Select Recipe.", mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Search Recipe", "Please Select Recipe.", mContext);
         }
 //        else if(ProdHelper.getInstance().getProdPlc() == null){
 //            Utility.getInstance().showDialog("Search Plc", "Please Select Plc.", mContext);
@@ -313,7 +313,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
             });
         } catch (Exception ex) {
 
-            Utility.getInstance().showDialog("Search Plc", ex.getMessage(), mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Search Plc", ex.getMessage(), mContext);
             ex.printStackTrace();
         }
     }
@@ -328,11 +328,11 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                     if (progressDialog.isShowing()) progressDialog.dismiss();
 
                     if (response.body() == null || response.body().size() == 0) {
-                        Utility.getInstance().showDialog("Search Barcode", "No Has in Stock.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", "No Has in Stock.", mContext);
                     } else {
 
                         if(!response.body().get(0).getItemNo().equals(tvItemNo.getText().toString())){
-                            Utility.getInstance().showDialog("Search Barcode", "The material is of a different product number than the selected recipe.", mContext);
+                            Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", "The material is of a different product number than the selected recipe.", mContext);
                         }
                         else{
                             boolean isSameBcr = false;
@@ -345,7 +345,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                             }
 
                             if(isSameBcr){
-                                Utility.getInstance().showDialog("Search Scan Lot", "Alredy Scan Item Barcode.", mContext);
+                                Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "Alredy Scan Item Barcode.", mContext);
                             }
                             else{
                                 for(int i=0; i<response.body().size(); i++){
@@ -362,13 +362,13 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onFailure(Call<List<StockItemDTO>> call, Throwable t) {
                     if (progressDialog.isShowing()) progressDialog.dismiss();
-                    Utility.getInstance().showDialog("Search Barcode", t.getMessage(), mContext);
+                    Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", t.getMessage(), mContext);
                 }
             });
         } catch (Exception ex) {
             if (progressDialog.isShowing()) progressDialog.dismiss();
 
-            Utility.getInstance().showDialog("Search Barcode", ex.getMessage(), mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", ex.getMessage(), mContext);
             ex.printStackTrace();
         }
     }
@@ -378,19 +378,19 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
 
             boolean iValidation = true;
             if(mAdapter.mList.size() == 0){
-                Utility.getInstance().showDialog("Release", "There are no materials to input.", mContext);
+                Utility.getInstance().showDialogWithBlinkingEffect("Release", "There are no materials to input.", mContext);
                 iValidation = false;
             }
 
             if(ProdHelper.getInstance().getProdComps() == null){
-                Utility.getInstance().showDialog("Release", "Please select the recipe you wish to input.", mContext);
+                Utility.getInstance().showDialogWithBlinkingEffect("Release", "Please select the recipe you wish to input.", mContext);
                 iValidation = false;
             }
 
             for(int i=0; i<mAdapter.mList.size(); i++){
                 if(mAdapter.mList.get(i).getRemainingQuantity().floatValue() == 0)
                 {
-                    Utility.getInstance().showDialog("Release", "There are materials with a material registration quantity of 0.", mContext);
+                    Utility.getInstance().showDialogWithBlinkingEffect("Release", "There are materials with a material registration quantity of 0.", mContext);
                     iValidation = false;
                     break;
                 }
@@ -400,7 +400,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
             {
                 if(ProdHelper.getInstance().getProdPlc() == null)
                 {
-                    Utility.getInstance().showDialog("Release", "There is PLC information that needs to be input..", mContext);
+                    Utility.getInstance().showDialogWithBlinkingEffect("Release", "There is PLC information that needs to be input..", mContext);
                     iValidation = false;
                 }
             }
@@ -449,7 +449,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                     if (progressDialog.isShowing()) progressDialog.dismiss();
 
                     if (response.body() == null ) {
-                        Utility.getInstance().showDialog("Release", "No processing result has been received.", mContext);
+                        Utility.getInstance().showDialogWithBlinkingEffect("Release", "No processing result has been received.", mContext);
                     } else {
 
                         if(response.body().getERR_CODE().equals("S00")){
@@ -462,7 +462,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                             init();
                         }
                         else{
-                            Utility.getInstance().showDialog("Release Fail", response.body().getERR_MSG(), mContext);
+                            Utility.getInstance().showDialogWithBlinkingEffect("Release Fail", response.body().getERR_MSG(), mContext);
                         }
                     }
                 }
@@ -470,13 +470,13 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onFailure(Call<DbResultVO> call, Throwable t) {
                     if (progressDialog.isShowing()) progressDialog.dismiss();
-                    Utility.getInstance().showDialog("Search Barcode", t.getMessage(), mContext);
+                    Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", t.getMessage(), mContext);
                 }
             });
         } catch (Exception ex) {
             if (progressDialog.isShowing()) progressDialog.dismiss();
 
-            Utility.getInstance().showDialog("Search Barcode", ex.getMessage(), mContext);
+            Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", ex.getMessage(), mContext);
             ex.printStackTrace();
         }
     }
