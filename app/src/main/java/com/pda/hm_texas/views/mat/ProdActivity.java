@@ -137,6 +137,8 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
         progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
+
+
     }
     @Override
     protected void onDestroy() {
@@ -202,6 +204,8 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                         tvloc.setText(ProdHelper.getInstance().getProdComps().getCompsLocation());
                         tvNeedQty.setText(ProdHelper.getInstance().getProdComps().getExpectedQuantity().stripTrailingZeros().toPlainString());
                         tvRemainQty.setText(ProdHelper.getInstance().getProdComps().getReleaseQty().stripTrailingZeros().toPlainString());
+
+                        OnScan("HMP20251027-00001");
                     }
 
                 }
@@ -419,6 +423,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                 temp.setP_COMPSLINENO(ProdHelper.getInstance().getProdComps().getCompsLineNo());
                 temp.setP_COMPSITEMNO(ProdHelper.getInstance().getProdComps().getItemNo());
                 temp.setP_COMPSLOCATION(ProdHelper.getInstance().getProdComps().getCompsLocation());
+                temp.setP_COMPSRACK(mAdapter.mList.get(i).getRackCode());
                 temp.setP_COMPSEMPTYQTY(mAdapter.mList.get(i).getEmptyCaseQty());
                 temp.setP_COMPSQTY(mAdapter.mList.get(i).getRemainingQuantity());
                 temp.setP_COMPSLOTNO(mAdapter.mList.get(i).getBarCode());

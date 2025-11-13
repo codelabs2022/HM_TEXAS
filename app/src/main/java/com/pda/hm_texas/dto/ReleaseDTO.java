@@ -34,6 +34,9 @@ public class ReleaseDTO {
     @SerializedName("P_COMPSLOCATION")
     @Expose
     private String p_COMPSLOCATION;
+    @SerializedName("P_COMPSRACK")
+    @Expose
+    private String p_COMPSRACK;
     @SerializedName("P_COMPSQTY")
     @Expose
     private BigDecimal p_COMPSQTY;
@@ -182,5 +185,13 @@ public class ReleaseDTO {
 
     public void setP_MANUFACTURINGDATE(String p_MANUFACTURINGDATE) {
         this.p_MANUFACTURINGDATE = p_MANUFACTURINGDATE;
+    }
+
+    public String getP_COMPSRACK() {
+        return p_COMPSRACK;
+    }
+
+    public void setP_COMPSRACK(String p_COMPSRACK) {
+        this.p_COMPSRACK = p_COMPSRACK;
     }
 }
