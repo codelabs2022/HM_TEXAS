@@ -116,6 +116,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
         rvLotList = findViewById(R.id.rvSaleLotInStock);
         rvLotList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         rvLotList.setAdapter(mAdapterLotinStock);
+        mAdapterLotinStock.mList.clear();
 
         mAdapterScanItem = new ProdItemAdapter(this);
         mAdapterScanItem.SetOnItemLongClickListiner(this);
@@ -126,7 +127,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
 
         LoadOrderLotInStock();
 
-        //LoadBarcode("HMP20250506-00001");
+
     }
 
     @Override
@@ -218,6 +219,8 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                         mAdapterLotinStock.mList.clear();
                         mAdapterLotinStock.mList.addAll(response.body());
                         mAdapterLotinStock.notifyDataSetChanged();
+
+                        LoadBarcode("HMP20250506-00002");
                     }
                 }
 

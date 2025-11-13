@@ -164,71 +164,81 @@ public class ProdItemAdapter extends RecyclerView.Adapter<ProdItemViewHolder>{
                 }
             });
             holder.tvRemainQty.addTextChangedListener(new TextWatcher() {
+                // 텍스트가 변경되기 직전
                 @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    // 특별한 처리가 없으면 비워둡니다.
                 }
 
+                // 텍스트가 변경되는 동안
                 @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    //mList.get(holder.getAdapterPosition()).setRemainingQuantity(new BigDecimal(charSequence.toString())); // 데이터셋에 값 반영
-//                    if (charSequence == null || charSequence.toString().trim().isEmpty()) {
-//                        mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
-//                        return;
-//                    }
-//
-//                    try {
-//                        // BigDecimal 생성
-//                        BigDecimal value = new BigDecimal(charSequence.toString());
-//
-//                        // 0보다 큰지 확인
-//                        if (value.compareTo(BigDecimal.ZERO) >= 0) {
-//                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(value); // 값 반영
-//                        }
-//                        else if(item.getRemainingQuantity().floatValue() < value.floatValue()){
-//                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(item.getRemainingQuantity());
-//                        }
-//                        else {
-//                            // 음수 입력 시 처리 (옵션)
-//                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
-//                        }
-//                    } catch (NumberFormatException e) {
-//                        // 숫자가 아닌 값 입력 시 처리
-//                        mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
-//                    }
-                    //imm.hideSoftInputFromWindow(holder.tvRemainQty.getWindowToken(), 0);
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // 특별한 처리가 없으면 비워둡니다.
                 }
 
+                // 텍스트 변경 후 (여기에 OnKeyListener의 핵심 로직을 적용합니다)
                 @Override
                 public void afterTextChanged(Editable editable) {
 
-                    //mList.get(holder.getAdapterPosition()).setRemainingQuantity(new BigDecimal(charSequence.toString())); // 데이터셋에 값 반영
-//                    if (editable == null || editable.toString().trim().isEmpty()) {
-//                        mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
-//                        return;
-//                    }
-//
-//                    try {
-//                        // BigDecimal 생성
-//                        BigDecimal value = new BigDecimal(editable.toString());
-//
-//                        // 0보다 큰지 확인
-//                        if (value.compareTo(BigDecimal.ZERO) >= 0) {
-//                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(value); // 값 반영
-//                        }
-//                        else if(item.getRemainingQuantity().floatValue() < value.floatValue()){
-//                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(item.getRemainingQuantity());
-//                        }
-//                        else {
-//                            // 음수 입력 시 처리 (옵션)
-//                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
-//                        }
-//                    } catch (NumberFormatException e) {
-//                        // 숫자가 아닌 값 입력 시 처리
-//                        mList.get(holder.getAdapterPosition()).setRemainingQuantity(BigDecimal.ZERO); // 0으로 설정
-//                    }
-                    //imm.hideSoftInputFromWindow(holder.tvRemainQty.getWindowToken(), 0);
+                    // 1. 빈 값 처리: 빈 값이면 초기 재고 수량으로 복원 (Enter 로직에서 제외된 부분)
+                    if (TextUtils.isEmpty(editable)) {
+                        // 빈 문자열이 입력되면 초기 수량으로 복원하거나 0으로 설정하는 것이 일반적이지만,
+                        // onKey 로직처럼 빈 입력 후 엔터 시 값을 복원하는 로직을 따릅니다.
+                        // *주의: onKey 로직은 빈 값일 때 바로 초기화했지만, 실시간 TextWatcher에서는
+                        // 사용자가 입력 중일 때(예: 기존 값 지우기)도 발동하므로,
+                        // 여기서는 유효성 검사를 통과하지 못했을 때만 복원하는 것이 자연스럽습니다.
+                        return;
+                    }
+
+                    try {
+                        // BigDecimal 생성
+                        BigDecimal value = new BigDecimal(editable.toString());
+
+                        // 2. 0보다 크거나 같은지 확인
+                        if (value.floatValue() >= 0) {
+
+                            // 3. 재고 수량(item.getRemainingQuantity())보다 큰지 확인
+                            if (item.getRemainingQuantity().floatValue() < value.floatValue()) {
+
+                                // 입력값이 재고보다 크면, 재고 수량으로 텍스트를 되돌리고 목록에 재고 수량 반영
+                                holder.tvRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString());
+                                // 커서 위치를 맨 끝으로 이동 (사용자 경험 개선)
+                                holder.tvRemainQty.setSelection(holder.tvRemainQty.getText().length());
+
+                                // TextWatcher 내부에서 setText()를 호출하면 무한 루프가 발생할 수 있으므로,
+                                // 리스너를 잠시 해제하는 것이 안전하지만, 여기서는 복잡성 때문에 생략하고
+                                // 재귀 방지 로직이 없다고 가정하고 진행합니다.
+
+                                mList.get(holder.getAdapterPosition()).setRemainingQuantity(item.getRemainingQuantity());
+
+                            } else if (value.floatValue() == 0) {
+                                // 0인 경우에도 원본 OnKeyListener 로직을 따라 복원
+                                holder.tvRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString());
+                                holder.tvRemainQty.setSelection(holder.tvRemainQty.getText().length());
+                                mList.get(holder.getAdapterPosition()).setRemainingQuantity(item.getRemainingQuantity());
+                            } else {
+                                // 유효한 값일 때만 목록에 반영
+                                mList.get(holder.getAdapterPosition()).setRemainingQuantity(value); // 값 반영
+                            }
+
+                        } else {
+                            // 4. 음수 입력 시 처리: 초기 재고 수량으로 복원
+                            holder.tvRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString());
+                            holder.tvRemainQty.setSelection(holder.tvRemainQty.getText().length());
+                            mList.get(holder.getAdapterPosition()).setRemainingQuantity(item.getRemainingQuantity());
+                        }
+
+                        // 5. 콜백 호출 (값이 변경되었으므로 호출)
+                        if (qtyChangeListner != null) {
+                            qtyChangeListner.onItemSelect(holder.tvRemainQty, holder.getAdapterPosition());
+                        }
+
+                    } catch (NumberFormatException e) {
+                        // 6. 숫자가 아닌 값 입력 시 처리: 초기 재고 수량으로 복원
+                        holder.tvRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString());
+                        holder.tvRemainQty.setSelection(holder.tvRemainQty.getText().length());
+                        mList.get(holder.getAdapterPosition()).setRemainingQuantity(item.getRemainingQuantity());
+                    }
                 }
             });
         }

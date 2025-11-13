@@ -3,10 +3,12 @@ package com.pda.hm_texas.views;
 import static com.pda.hm_texas.helper.FileDownloader.downloadFile;
 
 import android.app.DownloadManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -113,7 +115,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     //if(progressDialog.isShowing())progressDialog.dismiss();
                     if(!NowAppVersion.equals(response.body().getVERSION()))
                     {
-                        RequestPermission();
+                        //RequestPermission();
+                        downloadFileViaBrowser(mContext, RetorfitHelper.USE_URL +"pda/getAPK?pgtype=TEXAS");
                     }
                     else{
                         if(progressDialog.isShowing())progressDialog.dismiss();
@@ -136,6 +139,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         catch (Exception ex){
             if(progressDialog.isShowing())progressDialog.dismiss();
             Utility.getInstance().showDialogWithBlinkingEffect("Check Version", ex.getMessage(), mContext);
+        }
+    }
+
+    public void downloadFileViaBrowser(Context context, String url) {
+
+        try {
+            // 1. URL 문자열을 Uri 객체로 파싱합니다.
+            Uri uri = Uri.parse(url);
+
+            // 2. ACTION_VIEW 액션을 가진 Intent를 생성합니다.
+            // ACTION_VIEW는 시스템에게 해당 데이터를 '본다'는 행위를 요청하며,
+            // URL의 경우 기본적으로 브라우저가 이 Intent를 처리합니다.
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+
+            // 3. Intent를 실행합니다.
+            context.startActivity(intent);
+
+        } catch (ActivityNotFoundException e) {
+            // 사용자의 기기에 URL을 처리할 수 있는 앱(브라우저)이 없을 경우
+            Toast.makeText(context, "브라우저를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            // 기타 오류 처리
+            Toast.makeText(context, "파일 다운로드 요청 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
     }
 

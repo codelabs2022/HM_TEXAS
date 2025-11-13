@@ -1,6 +1,7 @@
 package com.pda.hm_texas.adapter.prod;
 
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -11,8 +12,8 @@ import com.pda.hm_texas.R;
 
 public class ProdItemViewHolder extends RecyclerView.ViewHolder{
     public LinearLayout liItem;
-    public TextView tvItemNo, tvItemName, tvBarcode, tvLot,  tvRemainQty, tvMfc, tvExp, tvUnit ;
-
+    public TextView tvItemNo, tvItemName, tvBarcode, tvLot, tvMfc, tvExp, tvUnit ;
+    public EditText tvRemainQty;
     public ProdItemViewHolder(@NonNull View itemView) {
         super(itemView);
 

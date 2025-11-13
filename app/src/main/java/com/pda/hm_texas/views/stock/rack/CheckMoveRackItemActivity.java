@@ -116,6 +116,7 @@ public class CheckMoveRackItemActivity extends AppCompatActivity implements View
         });
 
         getLcoation();
+        //findViewById(R.id.textView6).setOnClickListener(this);
     }
 
     @Override
@@ -147,6 +148,9 @@ public class CheckMoveRackItemActivity extends AppCompatActivity implements View
             i.putParcelableArrayListExtra("MOVEITEM", (ArrayList<? extends Parcelable>) mAdapter.mList);
             startActivity(i);
             finish();
+        }
+        else {
+            OnScan("HMP20250506-00001");
         }
     }
 

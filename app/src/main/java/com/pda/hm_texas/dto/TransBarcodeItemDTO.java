@@ -41,6 +41,18 @@ public class TransBarcodeItemDTO {
     @Expose
     private String custLotNo;
 
+    public String getRackCode() {
+        return rackCode;
+    }
+
+    public void setRackCode(String rackCode) {
+        this.rackCode = rackCode;
+    }
+
+    @SerializedName("RackCode")
+    @Expose
+    private String rackCode;
+
     public String getItemNo() {
         return itemNo;
     }

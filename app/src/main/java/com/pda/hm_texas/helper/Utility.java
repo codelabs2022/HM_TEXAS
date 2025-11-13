@@ -147,10 +147,10 @@ public class Utility {
         // AlertDialog 생성 및 설정 (생략된 세부 설정은 이전 답변 참고)
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(dialogView);
-        alertDialog = builder.create();
+        final AlertDialog currentDialog = builder.create();
 
-        if (alertDialog.getWindow() != null) {
-            alertDialog.setCanceledOnTouchOutside(false);
+        if (currentDialog.getWindow() != null) {
+            currentDialog.setCanceledOnTouchOutside(false);
         }
 
         // 깜빡임 애니메이션 설정 및 시작
@@ -171,15 +171,15 @@ public class Utility {
             @Override
             public void onClick(View v) {
                 stopBlinkingAnimation();
-                alertDialog.dismiss();
+                currentDialog.dismiss();
 
             }
         });
 
-        alertDialog.setOnDismissListener(dialog -> stopBlinkingAnimation());
+        currentDialog.setOnDismissListener(dialog -> stopBlinkingAnimation());
 
         colorAnimator.start();
-        alertDialog.show();
+        currentDialog.show();
     }
 
     public String getToday(){

@@ -72,7 +72,7 @@ public interface ApiService {
     Call<DbResultVO> setPicking(@Body PickingDTO pickings, @Query("user") String user);
 
     @POST("/pda/stock/getitem")
-    Call<List<TransBarcodeItemDTO>> getCustStockItemInfo(@Query("barcode") String barcode);
+    Call<List<TransBarcodeItemDTO>> getCustStockItemInfo(@Query("barcode") String barcode, @Query("loc") String loc);
 
     @POST("/pda/stock/set")
     Call<DbResultVO> setCustBarcode(@Body List<TransBarcodeItemDTO> items);

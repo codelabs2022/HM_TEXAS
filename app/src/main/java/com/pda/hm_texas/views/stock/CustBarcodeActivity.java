@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,8 +22,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pda.hm_texas.R;
 import com.pda.hm_texas.adapter.sale.SaleOrderAdapter;
+import com.pda.hm_texas.adapter.stock.LocationSpinnerAdapter;
 import com.pda.hm_texas.dig.ProgressDialog;
 import com.pda.hm_texas.dto.DbResultVO;
+import com.pda.hm_texas.dto.LocationDTO;
 import com.pda.hm_texas.dto.TransBarcodeItemDTO;
 import com.pda.hm_texas.event.OnItemLongClickListener;
 import com.pda.hm_texas.event.OnScanListener;
@@ -30,6 +34,7 @@ import com.pda.hm_texas.helper.RetorfitHelper;
 import com.pda.hm_texas.helper.Utility;
 import com.pda.hm_texas.adapter.stock.MappingAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
@@ -52,6 +57,11 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
     private ProgressDialog progressDialog;
     private MappingAdapter mAdapter;
     private TransBarcodeItemDTO nowScanItem;
+
+    private List<LocationDTO> mLocations = null;
+    private Spinner spLoc = null;
+    private LocationSpinnerAdapter locAdapter;
+    private LocationDTO selectedLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +106,32 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
         progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
+
+        spLoc = findViewById(R.id.spRackLoc);
+        mLocations = new ArrayList<>();
+        locAdapter = new LocationSpinnerAdapter(mContext, mLocations);
+        spLoc.setAdapter(locAdapter);
+
+        // 스피너 항목 선택 이벤트 처리
+        spLoc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedLocation = mLocations.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // 선택 해제 시 처리 (필요 시 구현)
+            }
+        });
+
+        getLcoation();
+
+        //findViewById(R.id.textView7).setOnClickListener(this);
+        //findViewById(R.id.textView6).setOnClickListener(this);
+
+
+
     }
 
     @Override
@@ -117,6 +153,12 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         if(view.getId() == R.id.btnCustBarcodeSet){
             SetCustBarcode();
+        }
+        else if(view.getId() == R.id.textView7){
+            OnScan("TEST212");
+        }
+        else if(view.getId() == R.id.textView6){
+            OnScan("HMP20250506-00001");
         }
     }
 
@@ -152,7 +194,7 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
             if (input.isEmpty()) {
                 // 값이 없거나 공백인 경우
                 getBarcodeinfo(ScanData);
-                //etBarcode.setText(ScanData);
+
             } else {
                 // 값이 존재하는 경우
                 etCustBarcode.setText(ScanData);
@@ -181,6 +223,41 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
         return false;
     }
 
+    private void getLcoation(){
+        progressDialog.show();
+
+        try {
+            Call<List<LocationDTO>> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL).getLocation();
+            data.enqueue(new Callback<List<LocationDTO>>() {
+                @Override
+                public void onResponse(Call<List<LocationDTO>> call, Response<List<LocationDTO>> response) {
+                    if (progressDialog.isShowing()) progressDialog.dismiss();
+
+                    if (response.body() == null ) {
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Stock", "No Has in Location.", mContext);
+                    } else {
+
+                        mLocations.clear();
+
+                        mLocations.addAll(response.body());
+                        locAdapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<LocationDTO>> call, Throwable t) {
+                    if (progressDialog.isShowing()) progressDialog.dismiss();
+                    Utility.getInstance().showDialogWithBlinkingEffect("Search Stock", "Fail to GetData Server.", mContext);
+                }
+            });
+        } catch (Exception ex) {
+            if (progressDialog.isShowing()) progressDialog.dismiss();
+
+            Utility.getInstance().showDialogWithBlinkingEffect("Search Stock", ex.getMessage(), mContext);
+            ex.printStackTrace();
+        }
+    }
+
     private void getBarcodeinfo(String barcode){
         progressDialog.show();
 
@@ -193,7 +270,7 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
                 if (progressDialog.isShowing()) progressDialog.dismiss();
                 Utility.getInstance().showDialogWithBlinkingEffect("Mapping", "This is a barcode that has already been used.", mContext);
             } else {
-                Call<List<TransBarcodeItemDTO>> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL).getCustStockItemInfo(barcode);
+                Call<List<TransBarcodeItemDTO>> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL).getCustStockItemInfo(barcode, selectedLocation.getCode());
                 data.enqueue(new Callback<List<TransBarcodeItemDTO>>() {
                     @Override
                     public void onResponse(Call<List<TransBarcodeItemDTO>> call, Response<List<TransBarcodeItemDTO>> response) {
@@ -211,6 +288,7 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
                             {
                                 nowScanItem = response.body().get(0);
                                 etBarcode.setText(barcode);
+
                             }
                         }
                     }
