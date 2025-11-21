@@ -138,7 +138,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
 
-
+        //findViewById(R.id.textView16).setOnClickListener(this);
     }
     @Override
     protected void onDestroy() {
@@ -205,7 +205,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                         tvNeedQty.setText(ProdHelper.getInstance().getProdComps().getExpectedQuantity().stripTrailingZeros().toPlainString());
                         tvRemainQty.setText(ProdHelper.getInstance().getProdComps().getReleaseQty().stripTrailingZeros().toPlainString());
 
-                        OnScan("HMP20251027-00001");
+
                     }
 
                 }
@@ -243,6 +243,10 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
 
                 bb.show();
             }
+        }
+        else if(view.getId() == R.id.textView16)
+        {
+            OnScan("HMP20251027-00001");
         }
     }
 

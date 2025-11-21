@@ -127,7 +127,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
 
         LoadOrderLotInStock();
 
-
+        //findViewById(R.id.textView11).setOnClickListener(this);
     }
 
     @Override
@@ -153,7 +153,10 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
         {
             CheckPicking();
         }
-
+//        else if(view.getId() == R.id.textView11)
+//        {
+//            LoadBarcode("HMP20250506-00002");
+//        }
     }
 
     @Override
@@ -220,7 +223,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                         mAdapterLotinStock.mList.addAll(response.body());
                         mAdapterLotinStock.notifyDataSetChanged();
 
-                        LoadBarcode("HMP20250506-00002");
+
                     }
                 }
 
