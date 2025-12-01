@@ -86,7 +86,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderViewHolder>{
             }
 
             holder.tvOrerDate.setText(item.getItemNo());
-            holder.tvOrerNo.setText(item.getProdOrderNo());
+            holder.tvOrerNo.setText(item.getDxkLotNo());
             holder.tvOrerLineNo.setText(String.valueOf(item.getProdOrderLineNo()));
             holder.tvItemNo.setText(item.getItemNo());
             holder.tvItemName.setText(item.getDescription());

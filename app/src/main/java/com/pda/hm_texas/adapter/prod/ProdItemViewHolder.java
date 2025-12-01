@@ -1,5 +1,6 @@
 package com.pda.hm_texas.adapter.prod;
 
+import android.content.Context;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -33,6 +34,7 @@ public class ProdItemViewHolder extends RecyclerView.ViewHolder{
         tvExp = itemView.findViewById(R.id.tvStockItemExp);
         tvUnit = itemView.findViewById(R.id.tvStockItemUnit);
 
+        imm = (InputMethodManager) itemView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         this.textWatcher = watcher;
         tvRemainQty.addTextChangedListener(textWatcher);
 

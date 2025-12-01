@@ -113,12 +113,14 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
 
 
         mAdapterLotinStock = new SaleOrderItemAdapter();
+        mAdapterLotinStock.isSales = true;
         rvLotList = findViewById(R.id.rvSaleLotInStock);
         rvLotList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         rvLotList.setAdapter(mAdapterLotinStock);
         mAdapterLotinStock.mList.clear();
 
         mAdapterScanItem = new ProdItemAdapter(this);
+        mAdapterScanItem.isSales = true;
         mAdapterScanItem.SetOnItemLongClickListiner(this);
         mAdapterScanItem.SetOnQtyChangeListener(this);
         rvPickingList = findViewById(R.id.rvSalePickingItem);
@@ -153,10 +155,10 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
         {
             CheckPicking();
         }
-//        else if(view.getId() == R.id.textView11)
-//        {
-//            LoadBarcode("HMP20250506-00002");
-//        }
+        else if(view.getId() == R.id.textView11)
+        {
+            LoadBarcode("SP_TEST1");
+        }
     }
 
     @Override
@@ -305,6 +307,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                                     Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "This inventory cannot be picked.", mContext);
                                 }
                                 else{
+                                    response.body().get(0).setOriginalRemainingQuantity(response.body().get(0).getRemainingQuantity());
                                     mAdapterScanItem.mList.add(response.body().get(0));
                                     mAdapterScanItem.notifyDataSetChanged();
 

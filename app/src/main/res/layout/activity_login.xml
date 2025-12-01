@@ -36,16 +36,29 @@
 
     <CheckBox
         android:id="@+id/chkSaveID"
-        android:layout_width="201dp"
-        android:layout_height="37dp"
+        android:layout_width="121dp"
+        android:layout_height="40dp"
         android:text="@string/saveid_desc"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.357"
+        app:layout_constraintHorizontal_bias="0.262"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.695" />
+        app:layout_constraintVertical_bias="0.683" />
+
+    <CheckBox
+        android:id="@+id/chkTest"
+        android:layout_width="97dp"
+        android:layout_height="43dp"
+        android:text="Use Test"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.761"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.686" />
 
     <TextView
         android:id="@+id/textView3"

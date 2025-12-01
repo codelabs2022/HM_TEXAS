@@ -33,6 +33,7 @@ public class ProdItemAdapter extends RecyclerView.Adapter<ProdItemViewHolder>{
     public List<StockItemDTO> mList = null;
     private Context mContext;
     private InputMethodManager imm;
+    public boolean isSales = false;
 //
     private OnItemLongClickListener longClickListener;
     public void SetOnItemLongClickListiner(OnItemLongClickListener callback)
@@ -109,7 +110,8 @@ public class ProdItemAdapter extends RecyclerView.Adapter<ProdItemViewHolder>{
 
             holder.tvItemNo.setText(item.getItemNo());
             holder.tvItemName.setText(item.getDescription());
-            holder.tvBarcode.setText(item.getBarCode());
+            if(isSales)holder.tvBarcode.setText(item.getCustLotNo());
+            else holder.tvBarcode.setText(item.getBarCode());
             holder.tvLot.setText(item.getLotNo());
             holder.tvMfc.setText(item.getManufacturingDate());
             holder.tvExp.setText(item.getExpirationDate());
@@ -286,25 +288,42 @@ public class ProdItemAdapter extends RecyclerView.Adapter<ProdItemViewHolder>{
 
             if (item == null || position == -1 || mList == null) return;
 
+            final BigDecimal originalMaxQty = item.getOriginalRemainingQuantity();
+
             try {
+
                 BigDecimal value = new BigDecimal(editable.toString());
 
-                if (item.getRemainingQuantity().floatValue() < value.floatValue()) {
-                    // 재고보다 크면, 원래 값으로 복원
-                    this.editText.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString());
+                // 1. 0보다 작은지 확인 (음수 방지)
+                if (value.floatValue() < 0) {
+                    // 음수 처리 시, 복원 로직 실행 (아래 NumberFormatException과 동일하게 처리)
+                    this.editText.setText(originalMaxQty.stripTrailingZeros().toPlainString());
                     this.editText.setSelection(this.editText.getText().length());
-                    mList.get(this.position).setRemainingQuantity(item.getRemainingQuantity());
+                    mList.get(this.position).setRemainingQuantity(originalMaxQty);
+                    return;
                 }
-                else if(value.floatValue() == 0){
-                    this.editText.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString());
+
+                // 2. 입력된 값(value)이 원본 수량(originalMaxQty)보다 큰지 확인
+                if (originalMaxQty.floatValue() < value.floatValue()) {
+
+                    // 입력값이 원본 재고보다 크면, 원본 재고 수량으로 텍스트를 되돌립니다.
+                    this.editText.setText(originalMaxQty.stripTrailingZeros().toPlainString());
                     this.editText.setSelection(this.editText.getText().length());
-                    mList.get(this.position).setRemainingQuantity(item.getRemainingQuantity());
+
+                    // 💡 mList에는 원본 수량으로 복원
+                    mList.get(this.position).setRemainingQuantity(originalMaxQty);
+
+                } else {
+                    // 3. 0이거나 유효한 값일 때만 목록에 반영
+                    // '0'일 때 복원하는 로직은 유효성 검사에서 처리되므로 여기서는 유효한 값만 처리합니다.
+                    // (사용자가 0을 입력했으면 0으로 반영, 다른 유효값도 반영)
+                    mList.get(this.position).setRemainingQuantity(value); // 값 반영
                 }
-                else {
-                    // 유효한 값일 때만 목록에 반영
-                    mList.get(this.position).setRemainingQuantity(value);
+
+                // 💡 콜백 호출 (값이 변경되었으므로 호출)
+                if (qtyChangeListner != null) {
+                    qtyChangeListner.onItemSelect(this.editText, this.position);
                 }
-                // ... (나머지 유효성 검사 로직) ...
 
             } catch (NumberFormatException e) {
                 // ... (숫자가 아닌 값 처리 로직) ...
@@ -313,10 +332,6 @@ public class ProdItemAdapter extends RecyclerView.Adapter<ProdItemViewHolder>{
                 mList.get(position).setRemainingQuantity(item.getRemainingQuantity());
             }
 
-            // 💡 콜백 호출 시에도 현재 position 사용
-            if (qtyChangeListner != null) {
-                qtyChangeListner.onItemSelect(this.editText, this.position);
-            }
         }
     }
 }

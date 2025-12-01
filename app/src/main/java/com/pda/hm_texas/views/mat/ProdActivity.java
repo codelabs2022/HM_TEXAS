@@ -89,7 +89,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
         TextView tvLoc = findViewById(R.id.tvMatRegLoc);
         TextView tvQty = findViewById(R.id.tvMatRegQty);
 
-        tvOrder.setText(ProdHelper.getInstance().getProdOrder().getProdOrderNo());
+        tvOrder.setText(ProdHelper.getInstance().getProdOrder().getDxkLotNo());
         tvItem.setText(ProdHelper.getInstance().getProdOrder().getDescription());
         tvLoc.setText(ProdHelper.getInstance().getProdOrder().getLocationCode());
         tvQty.setText(ProdHelper.getInstance().getProdOrder().getRemainingQuantity().stripTrailingZeros().toPlainString() + " "+ ProdHelper.getInstance().getProdOrder().getUnitOfMeasureCode());
@@ -354,6 +354,7 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                             else{
                                 for(int i=0; i<response.body().size(); i++){
                                     response.body().get(i).setEmptyCaseQty(new BigDecimal(etEmptyCase.getText().toString()));
+                                    response.body().get(i).setOriginalRemainingQuantity(response.body().get(i).getRemainingQuantity());
                                 }
                                 mAdapter.mList.addAll(response.body());
                                 mAdapter.notifyDataSetChanged();

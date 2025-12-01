@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private TextInputEditText etLoginID, etLoginPW;
     private Button btnLogin;
-    private CheckBox chkSaveID;
+    private CheckBox chkSaveID, chkTest;
 
     private static final int REQUEST_CODE_PERMISSION = 1001;
     private DownloadManager downloadManager;
@@ -65,9 +65,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         mContext = this;
         chkSaveID = findViewById(R.id.chkSaveID);
+        chkTest = findViewById(R.id.chkTest);
         btnLogin = findViewById(R.id.btnLogin);
 
         chkSaveID.setOnClickListener(this::onClick);
+        chkTest.setOnClickListener(this::onClick);
         btnLogin.setOnClickListener(this);
 
         etLoginID = findViewById(R.id.edLoginID);
@@ -79,6 +81,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         SharedPreferences sharedPreferences= getSharedPreferences("HOIMYUNGAPI", MODE_PRIVATE);
         SharedPreferences.Editor editor= sharedPreferences.edit();
         String saveid = sharedPreferences.getString("SAVE_ID", "");
+        String isTest = sharedPreferences.getString("IS_TEST", "N");
+
+        if(isTest.equals("N"))
+        {
+            chkTest.setChecked(false);
+            RetorfitHelper.USE_URL =  RetorfitHelper.LIVE_URL;
+        }
+        else {
+            chkTest.setChecked(true);
+            RetorfitHelper.USE_URL =  RetorfitHelper.TEST_URL;
+        }
 
         if(!saveid.isEmpty())
         {
@@ -116,7 +129,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     if(!NowAppVersion.equals(response.body().getVERSION()))
                     {
                         //RequestPermission();
-                        downloadFileViaBrowser(mContext, RetorfitHelper.USE_URL +"pda/getAPK?pgtype=TEXAS");
+                        if(chkTest.isChecked())downloadFileViaBrowser(mContext, RetorfitHelper.USE_URL +"pda/getTESTAPK?pgtype=TEXAS_TEST");
+                        else downloadFileViaBrowser(mContext, RetorfitHelper.USE_URL +"pda/getAPK?pgtype=TEXAS");
                     }
                     else{
                         if(progressDialog.isShowing())progressDialog.dismiss();
@@ -206,6 +220,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         }
     }
+
+    public void CheckTest(){
+
+        SharedPreferences sharedPreferences = getSharedPreferences("HOIMYUNGAPI", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if(chkTest.isChecked())
+        {
+            RetorfitHelper.USE_URL =  RetorfitHelper.TEST_URL;
+            editor.putString("IS_TEST", "Y");
+        }
+        else{
+            RetorfitHelper.USE_URL =  RetorfitHelper.LIVE_URL;
+            editor.putString("IS_TEST", "N");
+
+        }
+        editor.apply();
+    }
+
     private void LoginProc() throws Exception {
         progressDialog.show();
         if(etLoginID.getText().toString().equals("") || etLoginID.getText() == null){
@@ -294,6 +327,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         else if(v.getId() == R.id.chkSaveID){
             CheckSaveState(v);
+        }
+        else if(v.getId() == R.id.chkTest){
+            CheckTest();
         }
     }
 

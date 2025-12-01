@@ -30,6 +30,8 @@ public class SaleOrderItemAdapter  extends RecyclerView.Adapter<SaleLotInStockVi
         this.longClickListener = callback;
     }
 
+    public boolean isSales = false;
+
     public SaleOrderItemAdapter(){
         mList = new ArrayList();
     }
@@ -90,7 +92,8 @@ public class SaleOrderItemAdapter  extends RecyclerView.Adapter<SaleLotInStockVi
 
             holder.tvItemNo.setText(item.getItemNo());
             holder.tvItemName.setText(item.getDescription());
-            holder.tvBarcode.setText(item.getBarCode());
+            if(isSales) holder.tvBarcode.setText(item.getCustLotNo());
+            else holder.tvBarcode.setText(item.getBarCode());
             holder.tvLot.setText(item.getLotNo() );
             holder.tvRemainQty.setText(item.getRemainingQuantity().stripTrailingZeros().toPlainString() + " "+item.getUnitofMeasureCode());
             holder.tvMnf.setText(item.getManufacturingDate());
