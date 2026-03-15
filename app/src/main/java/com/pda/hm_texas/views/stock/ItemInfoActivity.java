@@ -147,7 +147,7 @@ public class ItemInfoActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public boolean onKey(View view, int i, KeyEvent keyEvent) {
 
-        if(i == KeyEvent.KEYCODE_ENTER)
+        if(i == KeyEvent.KEYCODE_ENTER && keyEvent.getAction() == KeyEvent.ACTION_DOWN)
         {
             if(view.getId() == R.id.etIfBarcode){
                 SearchItem(etBarcode.getText().toString().trim());

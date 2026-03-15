@@ -43,6 +43,10 @@ public class StockItemDTO implements Parcelable {
     @Expose
     private String rackCode;
 
+    @SerializedName("custLotNo")
+    @Expose
+    private String custLotNo;
+
     private BigDecimal originalRemainingQuantity = new BigDecimal(0);
 
     public BigDecimal getOriginalRemainingQuantity() {
@@ -60,12 +64,6 @@ public class StockItemDTO implements Parcelable {
     public void setCustLotNo(String custLotNo) {
         this.custLotNo = custLotNo;
     }
-
-    @SerializedName("custLotNo")
-    @Expose
-    private String custLotNo;
-
-
     private transient boolean isSelect = false;
     private transient BigDecimal emptyCaseQty;
 

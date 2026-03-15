@@ -24,6 +24,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.pda.hm_texas.R;
 import com.pda.hm_texas.adapter.prod.OrderAdapter;
 import com.pda.hm_texas.adapter.prod.ProdItemAdapter;
+import com.pda.hm_texas.dig.ItemDialog;
 import com.pda.hm_texas.dig.PlcDialog;
 import com.pda.hm_texas.dig.ProgressDialog;
 import com.pda.hm_texas.dig.RecipeDialog;
@@ -102,6 +103,10 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btnShowPlc = findViewById(R.id.btnPopupPlc);
         btnShowPlc.setOnClickListener(this::onClick);
+
+        //26.03.14 재고선택 추가
+        Button btnSearchItems = findViewById(R.id.btnPopUpItem);
+        btnSearchItems.setOnClickListener(this::onClick);
 
         tvItemNo = findViewById(R.id.tvProdRecipeItemNo);
         tvItemName = findViewById(R.id.tvProdRecipeItemName);
@@ -246,7 +251,64 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(view.getId() == R.id.textView16)
         {
+            //테스트 코드
             OnScan("HMP20251027-00001");
+        }
+        else if(view.getId() == R.id.btnPopUpItem){
+            if(ProdHelper.getInstance().getProdComps() == null)
+            {
+                Utility.getInstance().showDialogWithBlinkingEffect("Search Release Item", "There are no recipes to select.", mContext);
+            }
+            else{
+                ItemDialog aa = new ItemDialog(this, tvItemNo.getText().toString(), tvloc.getText().toString());
+                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                layoutParams.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                layoutParams.dimAmount = 0.8f;
+                aa.getWindow().setAttributes(layoutParams);
+
+                Button btnComplete = aa.findViewById(R.id.btnSetProdStock);
+                btnComplete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if(aa.mAdapter.mSelectedItem == null)
+                        {
+                            Utility.getInstance().showDialogWithBlinkingEffect("Search Stock Release Item", "Please select the materials to input.", mContext);
+                        }
+                        else{
+                            boolean isSameBcr = false;
+                            StockItemDTO temp = aa.mAdapter.mSelectedItem;
+                            for(int k=0; k<mAdapter.mList.size(); k++){
+                                if(mAdapter.mList.get(k).getBarCode().equals(temp.getBarCode())){
+                                    isSameBcr = true;
+                                    break;
+                                }
+                            }
+
+                            if(isSameBcr){
+                                Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "Alredy Scan Item Barcode.", mContext);
+                            }
+                            else{
+                                temp.setEmptyCaseQty(new BigDecimal(etEmptyCase.getText().toString()));
+                                temp.setOriginalRemainingQuantity(temp.getRemainingQuantity());
+                                mAdapter.mList.add(temp);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                            aa.dismiss();
+                        }
+                    }
+                });
+
+                Button btnCancle = aa.findViewById(R.id.btnCancleProdStock);
+                btnCancle.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        aa.dismiss();
+                    }
+                });
+
+                aa.show();
+            }
         }
     }
 

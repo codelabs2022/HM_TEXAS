@@ -98,4 +98,7 @@ public interface ApiService {
     @GET("/pda/getfactory")
     Call<List<FactoryDTO>> getFactory(@Query("fcode") String fcode);
 
+    @POST("/pda/prod/screlease")
+    Call<List<StockItemDTO>> getReleaseStockItems(@Query("itemno") String itemNo, @Query("loc") String loc);
+
 }

@@ -93,6 +93,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             RetorfitHelper.USE_URL =  RetorfitHelper.TEST_URL;
         }
 
+        //RetorfitHelper.USE_URL =  "http://192.168.0.36:9090/";
+
         if(!saveid.isEmpty())
         {
             chkSaveID.setChecked(true);

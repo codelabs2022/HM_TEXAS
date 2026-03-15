@@ -174,7 +174,7 @@
                         android:id="@+id/textView11"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="7"
+                        android:layout_weight="4"
                         android:background="@drawable/down_line_blue"
                         android:text="Recipe"
                         android:textColor="@color/colorPrimary"
@@ -188,6 +188,16 @@
                         android:layout_weight="3"
                         android:background="@color/colorPrimary"
                         android:text="SET"
+                        android:textSize="14sp" />
+
+                    <Button
+                        android:id="@+id/btnPopUpItem"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="3dp"
+                        android:layout_weight="3"
+                        android:background="@color/colorPrimary"
+                        android:text="SEARCH"
                         android:textSize="14sp" />
                 </LinearLayout>
 
