@@ -40,6 +40,9 @@ public class SaleOrderDTO {
     @SerializedName("qtyShipped")
     @Expose
     private BigDecimal qtyShipped;
+    @SerializedName("remainPicking")
+    @Expose
+    private BigDecimal remainPicking;
     @SerializedName("locationCode")
     @Expose
     private String locationCode;
@@ -148,5 +151,13 @@ public class SaleOrderDTO {
 
     public void setLocationCode(String locationCode) {
         this.locationCode = locationCode;
+    }
+
+    public BigDecimal getRemainPicking() {
+        return remainPicking;
+    }
+
+    public void setRemainPicking(BigDecimal remainPicking) {
+        this.remainPicking = remainPicking;
     }
 }

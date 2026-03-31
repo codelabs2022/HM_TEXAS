@@ -94,8 +94,11 @@ public class SaleOrderAdapter extends RecyclerView.Adapter<OrderViewHolder>{
             holder.tvItemNo.setText(item.getItemNo());
             holder.tvItemName.setText(item.getDescription());
             holder.tvOrderQty.setText(item.getOrderQty().stripTrailingZeros().toPlainString() + " " + item.getUnitofMeasureCode() );
-            holder.tvOrderProdQty.setText(item.getQtyShipped().stripTrailingZeros().toPlainString() + " " + item.getUnitofMeasureCode());
-            holder.tvOrderRemainQty.setText(item.getQtyToShip().stripTrailingZeros().toPlainString()+ " " + item.getUnitofMeasureCode());
+            // 기존 코드: holder.tvOrderProdQty.setText(item.getOrderQty()..stripTrailingZeros().toPlainString() + " " + item.getUnitofMeasureCode());
+
+            // 수정 코드: (OrderQty - RemainPicking) 계산 후 출력
+            holder.tvOrderProdQty.setText(item.getOrderQty().subtract(item.getRemainPicking()).stripTrailingZeros().toPlainString() + " " + item.getUnitofMeasureCode());
+            holder.tvOrderRemainQty.setText(item.getRemainPicking().stripTrailingZeros().toPlainString()+ " " + item.getUnitofMeasureCode());
         }
         catch (Exception ex){
             ex.printStackTrace();

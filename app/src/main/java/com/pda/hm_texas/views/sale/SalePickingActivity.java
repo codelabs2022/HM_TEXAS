@@ -26,6 +26,7 @@ import com.pda.hm_texas.R;
 import com.pda.hm_texas.adapter.prod.ProdItemAdapter;
 import com.pda.hm_texas.adapter.sale.SaleOrderAdapter;
 import com.pda.hm_texas.adapter.sale.SaleOrderItemAdapter;
+import com.pda.hm_texas.adapter.sale.SalePickingAdapter;
 import com.pda.hm_texas.dig.PlcDialog;
 import com.pda.hm_texas.dig.ProgressDialog;
 import com.pda.hm_texas.dig.RecipeDialog;
@@ -65,7 +66,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
     private RecyclerView rvLotList, rvPickingList;
     private ProgressDialog progressDialog;
     private SaleOrderItemAdapter mAdapterLotinStock;
-    private ProdItemAdapter mAdapterScanItem;
+    private SalePickingAdapter mAdapterScanItem;
 
     private boolean isCheck = true;
     @SuppressLint("MissingInflatedId")
@@ -119,17 +120,16 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
         rvLotList.setAdapter(mAdapterLotinStock);
         mAdapterLotinStock.mList.clear();
 
-        mAdapterScanItem = new ProdItemAdapter(this);
+        mAdapterScanItem = new SalePickingAdapter(this);
         mAdapterScanItem.isSales = true;
         mAdapterScanItem.SetOnItemLongClickListiner(this);
-        mAdapterScanItem.SetOnQtyChangeListener(this);
         rvPickingList = findViewById(R.id.rvSalePickingItem);
         rvPickingList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         rvPickingList.setAdapter(mAdapterScanItem);
 
         LoadOrderLotInStock();
 
-        //findViewById(R.id.textView11).setOnClickListener(this);
+        findViewById(R.id.textView11).setOnClickListener(this);
     }
 
     @Override
@@ -157,7 +157,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
         }
         else if(view.getId() == R.id.textView11)
         {
-            LoadBarcode("SP_TEST1");
+            LoadBarcode("RBD00040AA;AD-250331-701T-4;1000;US02206300;2600600001");
         }
     }
 
@@ -307,14 +307,6 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                                     Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "This inventory cannot be picked.", mContext);
                                 }
                                 else{
-                                    response.body().get(0).setOriginalRemainingQuantity(response.body().get(0).getRemainingQuantity());
-                                    mAdapterScanItem.mList.add(response.body().get(0));
-                                    mAdapterScanItem.notifyDataSetChanged();
-
-                                    BigDecimal totalQuantity = mAdapterScanItem.mList.stream()
-                                            .map(StockItemDTO::getRemainingQuantity)
-                                            .reduce(BigDecimal.ZERO, BigDecimal::add);
-                                    tvPickingQty.setText("TOTAL PICKING : "+totalQuantity.stripTrailingZeros().toPlainString());
 
                                     OptionalInt index = IntStream.range(0, mAdapterLotinStock.mList.size())
                                             .filter(i -> mAdapterLotinStock.mList.get(i).getBarCode().equals(response.body().get(0).getBarCode()))
@@ -322,6 +314,21 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
                                     if (index.isPresent()) {
                                         mAdapterLotinStock.mList.get(index.getAsInt()).setSelect(true); // Index: 1
                                         mAdapterLotinStock.notifyDataSetChanged();
+
+                                        response.body().get(0).setOriginalRemainingQuantity(response.body().get(0).getRemainingQuantity());
+                                        response.body().get(0).setCustLotNo(lotNo);
+                                        response.body().get(0).setRemainingQuantity( mAdapterLotinStock.mList.get(index.getAsInt()).getRemainingQuantity());
+                                        mAdapterScanItem.mList.add(response.body().get(0));
+                                        mAdapterScanItem.notifyDataSetChanged();
+
+                                        BigDecimal totalQuantity = mAdapterScanItem.mList.stream()
+                                                .map(StockItemDTO::getRemainingQuantity)
+                                                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                                        tvPickingQty.setText("TOTAL PICKING : "+totalQuantity.stripTrailingZeros().toPlainString());
+
+                                    }
+                                    else{
+                                        Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "The scanned item is not on the list of available items for shipment", mContext);
                                     }
                                 }
                             }
