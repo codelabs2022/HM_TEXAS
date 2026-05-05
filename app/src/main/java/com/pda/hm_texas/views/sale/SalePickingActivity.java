@@ -129,7 +129,7 @@ public class SalePickingActivity extends AppCompatActivity  implements View.OnCl
 
         LoadOrderLotInStock();
 
-        findViewById(R.id.textView11).setOnClickListener(this);
+        //findViewById(R.id.textView11).setOnClickListener(this);
     }
 
     @Override

@@ -276,8 +276,38 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                             Utility.getInstance().showDialogWithBlinkingEffect("Search Stock Release Item", "Please select the materials to input.", mContext);
                         }
                         else{
+                                                        
+
                             boolean isSameBcr = false;
                             StockItemDTO temp = aa.mAdapter.mSelectedItem;
+
+                            // 2026.04.21 자재등록시에 자재는 수입검사 반제품은 출하검사 체크 추가
+                            String inventoryPostingGroup = temp.getInventoryPostingGroup();
+                            if (inventoryPostingGroup != null) {
+                                if (inventoryPostingGroup.equals("RAWMAT")) {
+                                    // 자재: 수입검사 결과가 PASS가 아니면 에러
+                                    if ("1".equals(temp.getInsInYN())) {
+                                        if (!"PASS".equals(temp.getInsInRes())) {
+                                            Utility.getInstance().showDialogWithBlinkingEffect("Inspection Result", "The incoming inspection result is not 'PASS'.", mContext);
+                                            return;
+                                        }
+                                    }
+                                } else if (inventoryPostingGroup.equals("HALF-PROD")) {
+                                    // 반제품: 공정검사여부(InsProdYN)나 출하검사여부(InsWrYN)가 설정되어 있는 경우 체크
+                                    boolean isTargetProd = "1".equals(temp.getInsProdYN());
+                                    boolean isTargetWr = "1".equals(temp.getInsWrYN());
+
+                                    boolean hasProdPass = isTargetProd && "PASS".equals(temp.getInsProdRes());
+                                    boolean hasWrPass = isTargetWr && "PASS".equals(temp.getInsWrRes());
+
+                                    // 검사 대상인 항목이 하나라도 있고, 그 중 하나라도 PASS가 있으면 통과
+                                    if ((isTargetProd || isTargetWr) && !(hasProdPass || hasWrPass)) {
+                                        Utility.getInstance().showDialogWithBlinkingEffect("Inspection Result", "The inspection result (Process/Shipment) is not 'PASS'.", mContext);
+                                        return;
+                                    }
+                                }
+                            }
+
                             for(int k=0; k<mAdapter.mList.size(); k++){
                                 if(mAdapter.mList.get(k).getBarCode().equals(temp.getBarCode())){
                                     isSameBcr = true;
@@ -396,15 +426,42 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
                     if (response.body() == null || response.body().size() == 0) {
                         Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", "No Has in Stock.", mContext);
                     } else {
-
-                        if(!response.body().get(0).getItemNo().equals(tvItemNo.getText().toString())){
+                        StockItemDTO selectStockItem = response.body().get(0);
+                        if(!selectStockItem.getItemNo().equals(tvItemNo.getText().toString())){
                             Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", "The material is of a different product number than the selected recipe.", mContext);
                         }
                         else{
+                            // 2026.04.21 자재등록시에 자재는 수입검사 반제품은 출하검사 체크 추가
+                            String inventoryPostingGroup = selectStockItem.getInventoryPostingGroup();
+                            if (inventoryPostingGroup != null) {
+                                if (inventoryPostingGroup.equals("RAWMAT")) {
+                                    // 자재: 수입검사 결과가 PASS가 아니면 에러
+                                    if ("1".equals(selectStockItem.getInsInYN())) {
+                                        if (!"PASS".equals(selectStockItem.getInsInRes())) {
+                                            Utility.getInstance().showDialogWithBlinkingEffect("Inspection Result", "The incoming inspection result is not 'PASS'.", mContext);
+                                            return;
+                                        }
+                                    }
+                                } else if (inventoryPostingGroup.equals("HALF-PROD")) {
+                                    // 반제품: 공정검사여부(InsProdYN)나 출하검사여부(InsWrYN)가 설정되어 있는 경우 체크
+                                    boolean isTargetProd = "1".equals(selectStockItem.getInsProdYN());
+                                    boolean isTargetWr = "1".equals(selectStockItem.getInsWrYN());
+
+                                    boolean hasProdPass = isTargetProd && "PASS".equals(selectStockItem.getInsProdRes());
+                                    boolean hasWrPass = isTargetWr && "PASS".equals(selectStockItem.getInsWrRes());
+
+                                    // 검사 대상인 항목이 하나라도 있고, 그 중 하나라도 PASS가 있으면 통과
+                                    if ((isTargetProd || isTargetWr) && !(hasProdPass || hasWrPass)) {
+                                        Utility.getInstance().showDialogWithBlinkingEffect("Inspection Result", "The inspection result (Process/Shipment) is not 'PASS'.", mContext);
+                                        return;
+                                    }
+                                }
+                            }
+
                             boolean isSameBcr = false;
 
                             for(int k=0; k<mAdapter.mList.size(); k++){
-                                if(mAdapter.mList.get(k).getBarCode().equals(response.body().get(0).getBarCode())){
+                                if(mAdapter.mList.get(k).getBarCode().equals(selectStockItem.getBarCode())){
                                     isSameBcr = true;
                                     break;
                                 }

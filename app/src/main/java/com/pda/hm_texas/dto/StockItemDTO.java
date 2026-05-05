@@ -47,6 +47,34 @@ public class StockItemDTO implements Parcelable {
     @Expose
     private String custLotNo;
 
+    @SerializedName("insInRes")
+    @Expose
+    private String insInRes;
+    @SerializedName("insMatRes")
+    @Expose
+    private String insMatRes;
+    @SerializedName("insProdRes")
+    @Expose
+    private String insProdRes;
+    @SerializedName("insWrRes")
+    @Expose
+    private String insWrRes;
+    @SerializedName("insInYN")
+    @Expose
+    private String insInYN;
+    @SerializedName("insMatYN")
+    @Expose
+    private String insMatYN;
+    @SerializedName("insProdYN")
+    @Expose
+    private String insProdYN;
+    @SerializedName("insWrYN")
+    @Expose
+    private String insWrYN;
+    @SerializedName("inventoryPostingGroup")
+    @Expose
+    private String inventoryPostingGroup;
+
     private BigDecimal originalRemainingQuantity = new BigDecimal(0);
 
     public BigDecimal getOriginalRemainingQuantity() {
@@ -64,6 +92,79 @@ public class StockItemDTO implements Parcelable {
     public void setCustLotNo(String custLotNo) {
         this.custLotNo = custLotNo;
     }
+
+    public String getInsInRes() {
+        return insInRes;
+    }
+
+    public void setInsInRes(String insInRes) {
+        this.insInRes = insInRes;
+    }
+
+    public String getInsMatRes() {
+        return insMatRes;
+    }
+
+    public void setInsMatRes(String insMatRes) {
+        this.insMatRes = insMatRes;
+    }
+
+    public String getInsProdRes() {
+        return insProdRes;
+    }
+
+    public void setInsProdRes(String insProdRes) {
+        this.insProdRes = insProdRes;
+    }
+
+    public String getInsWrRes() {
+        return insWrRes;
+    }
+
+    public void setInsWrRes(String insWrRes) {
+        this.insWrRes = insWrRes;
+    }
+
+    public String getInsInYN() {
+        return insInYN;
+    }
+
+    public void setInsInYN(String insInYN) {
+        this.insInYN = insInYN;
+    }
+
+    public String getInsMatYN() {
+        return insMatYN;
+    }
+
+    public void setInsMatYN(String insMatYN) {
+        this.insMatYN = insMatYN;
+    }
+
+    public String getInsProdYN() {
+        return insProdYN;
+    }
+
+    public void setInsProdYN(String insProdYN) {
+        this.insProdYN = insProdYN;
+    }
+
+    public String getInsWrYN() {
+        return insWrYN;
+    }
+
+    public void setInsWrYN(String insWrYN) {
+        this.insWrYN = insWrYN;
+    }
+
+    public String getInventoryPostingGroup() {
+        return inventoryPostingGroup;
+    }
+
+    public void setInventoryPostingGroup(String inventoryPostingGroup) {
+        this.inventoryPostingGroup = inventoryPostingGroup;
+    }
+
     private transient boolean isSelect = false;
     private transient BigDecimal emptyCaseQty;
 
@@ -181,6 +282,17 @@ public class StockItemDTO implements Parcelable {
         unitofMeasureCode = in.readString();
         rackCode = in.readString();
 
+        custLotNo = in.readString();
+        insInRes = in.readString();
+        insMatRes = in.readString();
+        insProdRes = in.readString();
+        insWrRes = in.readString();
+        insInYN = in.readString();
+        insMatYN = in.readString();
+        insProdYN = in.readString();
+        insWrYN = in.readString();
+        inventoryPostingGroup = in.readString();
+
         // transient 필드 읽기 (boolean과 BigDecimal)
         isSelect = in.readInt() == 1; // boolean 읽기
         emptyCaseQty = readBigDecimal(in);
@@ -219,6 +331,17 @@ public class StockItemDTO implements Parcelable {
 
         parcel.writeString(unitofMeasureCode);
         parcel.writeString(rackCode);
+
+        parcel.writeString(custLotNo);
+        parcel.writeString(insInRes);
+        parcel.writeString(insMatRes);
+        parcel.writeString(insProdRes);
+        parcel.writeString(insWrRes);
+        parcel.writeString(insInYN);
+        parcel.writeString(insMatYN);
+        parcel.writeString(insProdYN);
+        parcel.writeString(insWrYN);
+        parcel.writeString(inventoryPostingGroup);
 
         // transient 필드 쓰기 (boolean과 BigDecimal)
         parcel.writeInt(isSelect ? 1 : 0); // boolean 쓰기
