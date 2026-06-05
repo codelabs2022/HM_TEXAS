@@ -44,6 +44,9 @@ import com.pda.hm_texas.views.mat.rout.Dispersantfragment;
 import com.pda.hm_texas.views.mat.rout.InsulationFragment;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -413,73 +416,204 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
             ex.printStackTrace();
         }
     }
-    private void FindStockItem(String barcode){
+//    private void FindStockItem(String barcode){
+//        progressDialog.show();
+//
+//        try {
+//            Call<List<StockItemDTO>> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL).getStockItemInfo(barcode,  ProdHelper.getInstance().getProdComps().getCompsLocation());
+//            data.enqueue(new Callback<List<StockItemDTO>>() {
+//                @Override
+//                public void onResponse(Call<List<StockItemDTO>> call, Response<List<StockItemDTO>> response) {
+//                    if (progressDialog.isShowing()) progressDialog.dismiss();
+//
+//                    if (response.body() == null || response.body().size() == 0) {
+//                        Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", "No Has in Stock.", mContext);
+//                    } else {
+//                        StockItemDTO selectStockItem = response.body().get(0);
+//                        if(!selectStockItem.getItemNo().equals(tvItemNo.getText().toString())){
+//                            Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", "The material is of a different product number than the selected recipe.", mContext);
+//                        }
+//                        else{
+//                            // 2026.04.21 자재등록시에 자재는 수입검사 반제품은 출하검사 체크 추가
+//                            String inventoryPostingGroup = selectStockItem.getInventoryPostingGroup();
+//                            if (inventoryPostingGroup != null) {
+//                                if (inventoryPostingGroup.equals("RAWMAT")) {
+//                                    // 자재: 수입검사 결과가 PASS가 아니면 에러
+//                                    if ("1".equals(selectStockItem.getInsInYN())) {
+//                                        if (!"PASS".equals(selectStockItem.getInsInRes())) {
+//                                            Utility.getInstance().showDialogWithBlinkingEffect("Inspection Result", "The incoming inspection result is not 'PASS'.", mContext);
+//                                            return;
+//                                        }
+//                                    }
+//                                } else if (inventoryPostingGroup.equals("HALF-PROD")) {
+//                                    // 반제품: 공정검사여부(InsProdYN)나 출하검사여부(InsWrYN)가 설정되어 있는 경우 체크
+//                                    boolean isTargetProd = "1".equals(selectStockItem.getInsProdYN());
+//                                    boolean isTargetWr = "1".equals(selectStockItem.getInsWrYN());
+//
+//                                    boolean hasProdPass = isTargetProd && "PASS".equals(selectStockItem.getInsProdRes());
+//                                    boolean hasWrPass = isTargetWr && "PASS".equals(selectStockItem.getInsWrRes());
+//
+//                                    // 검사 대상인 항목이 하나라도 있고, 그 중 하나라도 PASS가 있으면 통과
+//                                    if ((isTargetProd || isTargetWr) && !(hasProdPass || hasWrPass)) {
+//                                        Utility.getInstance().showDialogWithBlinkingEffect("Inspection Result", "The inspection result (Process/Shipment) is not 'PASS'.", mContext);
+//                                        return;
+//                                    }
+//                                }
+//                            }
+//
+//                            // 1. 문자열로 된 유효기간을 LocalDate로 변환 (예: "2026-05-29")
+//                            // 데이터 형식에 맞춰 DateTimeFormatter를 수정하세요.
+//                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//
+//                            try {
+//                                LocalDate expirationDate = LocalDate.parse(selectStockItem.getExpirationDate(), formatter);
+//                                LocalDate today = LocalDate.now();
+//
+//                                // 2. 유효기간(expirationDate)이 오늘(today)보다 과거인지 비교
+//                                if (expirationDate.isBefore(today)) {
+//
+//                                    // 3. 유효기간 만료 시 경고 팝업 호출
+//                                    // (기존 Helper 클래스 호출 방식에 맞게 조정하세요)
+//                                    Utility.getInstance().showDialogWithBlinkingEffect("Inspection Result", "The material cannot be inserted as its expiration date has passed.", mContext);
+//
+//                                    // 4. 로직 종료
+//                                    return;
+//                                }
+//                            } catch (DateTimeParseException e) {
+//                                // 날짜 형식이 잘못되었을 경우 처리
+//                                Utility.getInstance().showDialogWithBlinkingEffect("Inspection Result", "The ExpirationDate data is incorrect.", mContext);
+//                            }
+//
+//                            boolean isSameBcr = false;
+//
+//                            for(int k=0; k<mAdapter.mList.size(); k++){
+//                                if(mAdapter.mList.get(k).getBarCode().equals(selectStockItem.getBarCode())){
+//                                    isSameBcr = true;
+//                                    break;
+//                                }
+//                            }
+//
+//                            if(isSameBcr){
+//                                Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "Alredy Scan Item Barcode.", mContext);
+//                            }
+//                            else{
+//                                for(int i=0; i<response.body().size(); i++){
+//                                    response.body().get(i).setEmptyCaseQty(new BigDecimal(etEmptyCase.getText().toString()));
+//                                    response.body().get(i).setOriginalRemainingQuantity(response.body().get(i).getRemainingQuantity());
+//                                }
+//                                mAdapter.mList.addAll(response.body());
+//                                mAdapter.notifyDataSetChanged();
+//                            }
+//                        }
+//
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<List<StockItemDTO>> call, Throwable t) {
+//                    if (progressDialog.isShowing()) progressDialog.dismiss();
+//                    Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", t.getMessage(), mContext);
+//                }
+//            });
+//        } catch (Exception ex) {
+//            if (progressDialog.isShowing()) progressDialog.dismiss();
+//
+//            Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", ex.getMessage(), mContext);
+//            ex.printStackTrace();
+//        }
+//    }
+
+    private void FindStockItem(String barcode) {
         progressDialog.show();
 
         try {
-            Call<List<StockItemDTO>> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL).getStockItemInfo(barcode,  ProdHelper.getInstance().getProdComps().getCompsLocation());
+            Call<List<StockItemDTO>> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL)
+                    .getStockItemInfo(barcode, ProdHelper.getInstance().getProdComps().getCompsLocation());
+
             data.enqueue(new Callback<List<StockItemDTO>>() {
                 @Override
                 public void onResponse(Call<List<StockItemDTO>> call, Response<List<StockItemDTO>> response) {
                     if (progressDialog.isShowing()) progressDialog.dismiss();
 
-                    if (response.body() == null || response.body().size() == 0) {
-                        Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", "No Has in Stock.", mContext);
-                    } else {
-                        StockItemDTO selectStockItem = response.body().get(0);
-                        if(!selectStockItem.getItemNo().equals(tvItemNo.getText().toString())){
-                            Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", "The material is of a different product number than the selected recipe.", mContext);
-                        }
-                        else{
-                            // 2026.04.21 자재등록시에 자재는 수입검사 반제품은 출하검사 체크 추가
-                            String inventoryPostingGroup = selectStockItem.getInventoryPostingGroup();
-                            if (inventoryPostingGroup != null) {
-                                if (inventoryPostingGroup.equals("RAWMAT")) {
-                                    // 자재: 수입검사 결과가 PASS가 아니면 에러
-                                    if ("1".equals(selectStockItem.getInsInYN())) {
-                                        if (!"PASS".equals(selectStockItem.getInsInRes())) {
-                                            Utility.getInstance().showDialogWithBlinkingEffect("Inspection Result", "The incoming inspection result is not 'PASS'.", mContext);
-                                            return;
-                                        }
-                                    }
-                                } else if (inventoryPostingGroup.equals("HALF-PROD")) {
-                                    // 반제품: 공정검사여부(InsProdYN)나 출하검사여부(InsWrYN)가 설정되어 있는 경우 체크
-                                    boolean isTargetProd = "1".equals(selectStockItem.getInsProdYN());
-                                    boolean isTargetWr = "1".equals(selectStockItem.getInsWrYN());
+                    if (response.body() == null || response.body().isEmpty()) {
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", "No stock found.", mContext);
+                        return; // 더 이상 진행하지 않고 즉시 종료 (Early return)
+                    }
 
-                                    boolean hasProdPass = isTargetProd && "PASS".equals(selectStockItem.getInsProdRes());
-                                    boolean hasWrPass = isTargetWr && "PASS".equals(selectStockItem.getInsWrRes());
+                    // 1. 무조건 첫 번째 데이터만 참조 (사용자 업무 규칙 적용)
+                    StockItemDTO selectStockItem = response.body().get(0);
 
-                                    // 검사 대상인 항목이 하나라도 있고, 그 중 하나라도 PASS가 있으면 통과
-                                    if ((isTargetProd || isTargetWr) && !(hasProdPass || hasWrPass)) {
-                                        Utility.getInstance().showDialogWithBlinkingEffect("Inspection Result", "The inspection result (Process/Shipment) is not 'PASS'.", mContext);
-                                        return;
-                                    }
-                                }
+                    // [품번 일치 여부 체크]
+                    if (!selectStockItem.getItemNo().equals(tvItemNo.getText().toString())) {
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", "The material is of a different product number than the selected recipe.", mContext);
+                        return;
+                    }
+
+                    // [수입 / 공정 / 출하 검사 결과 체크]
+                    String inventoryPostingGroup = selectStockItem.getInventoryPostingGroup();
+                    if (inventoryPostingGroup != null) {
+                        if (inventoryPostingGroup.equals("RAWMAT")) {
+                            // 자재: 수입검사 결과 PASS 체크
+                            if ("1".equals(selectStockItem.getInsInYN()) && !"PASS".equals(selectStockItem.getInsInRes())) {
+                                Utility.getInstance().showDialogWithBlinkingEffect("Inspection Result", "The incoming inspection result is not 'PASS'.", mContext);
+                                return;
                             }
+                        } else if (inventoryPostingGroup.equals("HALF-PROD")) {
+                            // 반제품: 공정검사나 출하검사 중 하나라도 PASS면 통과 (기존 로직 유지)
+                            boolean isTargetProd = "1".equals(selectStockItem.getInsProdYN());
+                            boolean isTargetWr = "1".equals(selectStockItem.getInsWrYN());
+                            boolean hasProdPass = isTargetProd && "PASS".equals(selectStockItem.getInsProdRes());
+                            boolean hasWrPass = isTargetWr && "PASS".equals(selectStockItem.getInsWrRes());
 
-                            boolean isSameBcr = false;
-
-                            for(int k=0; k<mAdapter.mList.size(); k++){
-                                if(mAdapter.mList.get(k).getBarCode().equals(selectStockItem.getBarCode())){
-                                    isSameBcr = true;
-                                    break;
-                                }
-                            }
-
-                            if(isSameBcr){
-                                Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "Alredy Scan Item Barcode.", mContext);
-                            }
-                            else{
-                                for(int i=0; i<response.body().size(); i++){
-                                    response.body().get(i).setEmptyCaseQty(new BigDecimal(etEmptyCase.getText().toString()));
-                                    response.body().get(i).setOriginalRemainingQuantity(response.body().get(i).getRemainingQuantity());
-                                }
-                                mAdapter.mList.addAll(response.body());
-                                mAdapter.notifyDataSetChanged();
+                            if ((isTargetProd || isTargetWr) && !(hasProdPass || hasWrPass)) {
+                                Utility.getInstance().showDialogWithBlinkingEffect("Inspection Result", "The inspection result (Process/Shipment) is not 'PASS'.", mContext);
+                                return;
                             }
                         }
+                    }
 
+                    // [유효기간 만료 체크] - NullPointerException 방지 로직 포함
+                    String expDateStr = selectStockItem.getExpirationDate();
+                    if (expDateStr == null || expDateStr.trim().isEmpty()) {
+                        Utility.getInstance().showDialogWithBlinkingEffect("Inspection Result", "The ExpirationDate data is missing.", mContext);
+                        return;
+                    }
+
+                    try {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        LocalDate expirationDate = LocalDate.parse(expDateStr, formatter);
+                        if (expirationDate.isBefore(LocalDate.now())) {
+                            Utility.getInstance().showDialogWithBlinkingEffect("Inspection Result", "The material cannot be inserted as its expiration date has passed.", mContext);
+                            return;
+                        }
+                    } catch (DateTimeParseException e) {
+                        Utility.getInstance().showDialogWithBlinkingEffect("Inspection Result", "The ExpirationDate data is incorrect.", mContext);
+                        return;
+                    }
+
+                    // [중복 스캔 체크]
+                    for (StockItemDTO item : mAdapter.mList) {
+                        if (item.getBarCode().equals(selectStockItem.getBarCode())) {
+                            Utility.getInstance().showDialogWithBlinkingEffect("Search Scan Lot", "Already scanned item barcode.", mContext);
+                            return;
+                        }
+                    }
+
+                    // [어댑터 추가 작업] - NumberFormatException 방지 및 단일 객체 추가
+                    try {
+                        String emptyCaseStr = etEmptyCase.getText().toString();
+                        // 값이 비어있으면 0으로 처리, 아니면 입력된 숫자 사용
+                        BigDecimal emptyCaseQty = emptyCaseStr.isEmpty() ? BigDecimal.ZERO : new BigDecimal(emptyCaseStr);
+
+                        selectStockItem.setEmptyCaseQty(emptyCaseQty);
+                        selectStockItem.setOriginalRemainingQuantity(selectStockItem.getRemainingQuantity());
+
+                        // 기존 addAll 대신 검증이 완료된 단일 첫 번째 데이터(selectStockItem)만 추가
+                        mAdapter.mList.add(selectStockItem);
+                        mAdapter.notifyDataSetChanged();
+
+                    } catch (NumberFormatException e) {
+                        Utility.getInstance().showDialogWithBlinkingEffect("Input Error", "Empty Case Quantity must be a valid number.", mContext);
                     }
                 }
 
@@ -491,7 +625,6 @@ public class ProdActivity extends AppCompatActivity implements View.OnClickListe
             });
         } catch (Exception ex) {
             if (progressDialog.isShowing()) progressDialog.dismiss();
-
             Utility.getInstance().showDialogWithBlinkingEffect("Search Barcode", ex.getMessage(), mContext);
             ex.printStackTrace();
         }

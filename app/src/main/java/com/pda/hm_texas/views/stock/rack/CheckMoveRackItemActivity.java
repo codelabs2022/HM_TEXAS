@@ -150,7 +150,7 @@ public class CheckMoveRackItemActivity extends AppCompatActivity implements View
             finish();
         }
         else {
-            OnScan("HMP20250506-00001");
+            OnScan("HM20250514-00001");
         }
     }
 

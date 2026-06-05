@@ -77,6 +77,10 @@ public interface ApiService {
     @POST("/pda/stock/set")
     Call<DbResultVO> setCustBarcode(@Body List<TransBarcodeItemDTO> items);
 
+    @POST("/pda/stock/ch" +
+            "cl")
+    Call<List<TransBarcodeItemDTO>> checkCustStockItemInfo(@Query("custBarcode") String custBarcode);
+
     @POST("/pda/stock/finditem")
     Call<List<StockItemDTO>> getindBarcode(@Query("item") String item, @Query("barcode") String barcode, @Query("loc") String loc);
 

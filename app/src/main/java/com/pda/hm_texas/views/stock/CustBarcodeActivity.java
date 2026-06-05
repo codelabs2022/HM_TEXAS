@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -28,6 +29,7 @@ import com.pda.hm_texas.dto.DbResultVO;
 import com.pda.hm_texas.dto.LocationDTO;
 import com.pda.hm_texas.dto.TransBarcodeItemDTO;
 import com.pda.hm_texas.event.OnItemLongClickListener;
+import com.pda.hm_texas.event.OnMsgBoxClickListener;
 import com.pda.hm_texas.event.OnScanListener;
 import com.pda.hm_texas.event.ScanReceiver;
 import com.pda.hm_texas.helper.RetorfitHelper;
@@ -155,10 +157,23 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
             SetCustBarcode();
         }
         else if(view.getId() == R.id.textView7){
-            OnScan("TEST212");
+            if(mAdapter.mList.size() == 0){
+                OnScan("26202-003");
+            }
+            else{
+                OnScan("TEST1234");
+            }
+            //OnScan("TEST1234");
         }
         else if(view.getId() == R.id.textView6){
-            OnScan("HMP20250506-00001");
+
+//            if(mAdapter.mList.size() == 0){
+//                OnScan("HM20260421-00001");
+//            }
+//            else{
+//                OnScan("HM20260512-00001");
+//            }
+            OnScan("HM20260421-00001");
         }
     }
 
@@ -262,45 +277,77 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
         progressDialog.show();
 
         try {
-            OptionalInt index = IntStream.range(0, mAdapter.mList.size())
-                    .filter(i -> mAdapter.mList.get(i).getBarcode().equals(barcode))
-                    .findFirst();
+            //동일 제품바코드 리딩시 리턴로직
+//            OptionalInt index = IntStream.range(0, mAdapter.mList.size())
+//                    .filter(i -> mAdapter.mList.get(i).getBarcode().equals(barcode))
+//                    .findFirst();
+//
+//            if (index.isPresent()) {
+//                if (progressDialog.isShowing()) progressDialog.dismiss();
+//                Utility.getInstance().showDialogWithBlinkingEffect("Mapping", "This is a barcode that has already been used.", mContext);
+//            } else {
+//                Call<List<TransBarcodeItemDTO>> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL).getCustStockItemInfo(barcode, selectedLocation.getCode());
+//                data.enqueue(new Callback<List<TransBarcodeItemDTO>>() {
+//                    @Override
+//                    public void onResponse(Call<List<TransBarcodeItemDTO>> call, Response<List<TransBarcodeItemDTO>> response) {
+//                        if (progressDialog.isShowing()) progressDialog.dismiss();
+//
+//                        if (response.body() == null || response.body().size() == 0) {
+//                            Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "No Has in Stock.", mContext);
+//                        } else {
+//                            if(response.body().size() > 1)
+//                            {
+//                                Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "One or more inventory information was found.", mContext);
+//                                etBarcode.setText("");
+//                            }
+//                            else
+//                            {
+//                                nowScanItem = response.body().get(0);
+//                                etBarcode.setText(barcode);
+//
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<TransBarcodeItemDTO>> call, Throwable t) {
+//                        if (progressDialog.isShowing()) progressDialog.dismiss();
+//                        Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "Fail to GetData Server.", mContext);
+//                        etBarcode.setText("");
+//                    }
+//                });
+//            }
 
-            if (index.isPresent()) {
-                if (progressDialog.isShowing()) progressDialog.dismiss();
-                Utility.getInstance().showDialogWithBlinkingEffect("Mapping", "This is a barcode that has already been used.", mContext);
-            } else {
-                Call<List<TransBarcodeItemDTO>> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL).getCustStockItemInfo(barcode, selectedLocation.getCode());
-                data.enqueue(new Callback<List<TransBarcodeItemDTO>>() {
-                    @Override
-                    public void onResponse(Call<List<TransBarcodeItemDTO>> call, Response<List<TransBarcodeItemDTO>> response) {
-                        if (progressDialog.isShowing()) progressDialog.dismiss();
+            Call<List<TransBarcodeItemDTO>> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL).getCustStockItemInfo(barcode, selectedLocation.getCode());
+            data.enqueue(new Callback<List<TransBarcodeItemDTO>>() {
+                @Override
+                public void onResponse(Call<List<TransBarcodeItemDTO>> call, Response<List<TransBarcodeItemDTO>> response) {
+                    if (progressDialog.isShowing()) progressDialog.dismiss();
 
-                        if (response.body() == null || response.body().size() == 0) {
-                            Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "No Has in Stock.", mContext);
-                        } else {
-                            if(response.body().size() > 1)
-                            {
-                                Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "One or more inventory information was found.", mContext);
-                                etBarcode.setText("");
-                            }
-                            else
-                            {
-                                nowScanItem = response.body().get(0);
-                                etBarcode.setText(barcode);
+                    if (response.body() == null || response.body().size() == 0) {
+                        Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "No Has in Stock.", mContext);
+                    } else {
+                        if(response.body().size() > 1)
+                        {
+                            Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "One or more inventory information was found.", mContext);
+                            etBarcode.setText("");
+                        }
+                        else
+                        {
+                            nowScanItem = response.body().get(0);
+                            etBarcode.setText(barcode);
 
-                            }
                         }
                     }
+                }
 
-                    @Override
-                    public void onFailure(Call<List<TransBarcodeItemDTO>> call, Throwable t) {
-                        if (progressDialog.isShowing()) progressDialog.dismiss();
-                        Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "Fail to GetData Server.", mContext);
-                        etBarcode.setText("");
-                    }
-                });
-            }
+                @Override
+                public void onFailure(Call<List<TransBarcodeItemDTO>> call, Throwable t) {
+                    if (progressDialog.isShowing()) progressDialog.dismiss();
+                    Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "Fail to GetData Server.", mContext);
+                    etBarcode.setText("");
+                }
+            });
         } catch (Exception ex) {
             if (progressDialog.isShowing()) progressDialog.dismiss();
 
@@ -319,18 +366,56 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
                     .findFirst();
 
             if (index.isPresent()) {
-                Utility.getInstance().showDialogWithBlinkingEffect("Mapping", "This is a customer barcode that has already been used.", mContext);
-                etCustBarcode.setText("");
-            } else {
-                if(nowScanItem != null){
-                    nowScanItem.setCustLotNo(custBarcode);
-                    mAdapter.mList.add(nowScanItem);
-                    mAdapter.notifyDataSetChanged();
+//                Utility.getInstance().showDialogWithBlinkingEffect("Mapping", "This is a customer barcode that has already been used.", mContext);
+//                etCustBarcode.setText("");
+                Utility.getInstance().showDialogByConfirm("Mapping", "There is already a customer barcode (\"+custBarcode+\") in the current list awaiting registration.\n" +
+                        "\n" +
+                        "Would you like to register?", mContext, new OnMsgBoxClickListener() {
+                    @Override
+                    public void OnConfirm() {
+                        Call<List<TransBarcodeItemDTO>> data = RetorfitHelper.getApiService(RetorfitHelper.USE_URL).checkCustStockItemInfo(custBarcode);
+                        data.enqueue(new Callback<List<TransBarcodeItemDTO>>() {
+                            @Override
+                            public void onResponse(Call<List<TransBarcodeItemDTO>> call, Response<List<TransBarcodeItemDTO>> response) {
+                                if (progressDialog.isShowing()) progressDialog.dismiss();
 
-                    etBarcode.setText("");
-                    etCustBarcode.setText("");
-                    nowScanItem = null;
-                }
+                                if (response.body() == null || response.body().size() == 0) {
+                                    ListUpMappingBarcode(custBarcode);
+                                } else {
+                                    Utility.getInstance().showDialogByConfirm("Mapping", "This is a customer barcode ("+custBarcode+") that has already been used.\n" +
+                                            "\n" +
+                                            "Would you like to register?", mContext, new OnMsgBoxClickListener() {
+                                        @Override
+                                        public void OnConfirm() {
+                                            ListUpMappingBarcode(custBarcode);
+                                        }
+
+                                        @Override
+                                        public void OnCancle() {
+                                            Utility.getInstance().showDialogWithBlinkingEffect("Mapping", "This is a customer barcode("+custBarcode+") that has already been used.", mContext);
+                                        }
+                                    });
+
+                                    etCustBarcode.setText("");
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<List<TransBarcodeItemDTO>> call, Throwable t) {
+                                if (progressDialog.isShowing()) progressDialog.dismiss();
+                                Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", "Fail to GetData Server.", mContext);
+                                etBarcode.setText("");
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void OnCancle() {
+                        Utility.getInstance().showDialogWithBlinkingEffect("Mapping", "This is a customer barcode("+custBarcode+") that has already been used.", mContext);
+                    }
+                });
+            }
+            else{
+                ListUpMappingBarcode(custBarcode);
             }
 
             if (progressDialog.isShowing()) progressDialog.dismiss();
@@ -339,6 +424,18 @@ public class CustBarcodeActivity extends AppCompatActivity implements View.OnCli
 
             Utility.getInstance().showDialogWithBlinkingEffect("Search Lot", ex.getMessage(), mContext);
             ex.printStackTrace();
+        }
+    }
+
+    private void ListUpMappingBarcode(String custBarcode){
+        if(nowScanItem != null){
+            nowScanItem.setCustLotNo(custBarcode);
+            mAdapter.mList.add(nowScanItem);
+            mAdapter.notifyDataSetChanged();
+
+            etBarcode.setText("");
+            etCustBarcode.setText("");
+            nowScanItem = null;
         }
     }
 

@@ -129,6 +129,8 @@ public class MoveRackActivity extends AppCompatActivity implements View.OnClickL
 
         tvRackTitle.setText(tvRackTitle.getText() + "-" + locationCode );
         getRackList(locationCode);
+
+        //findViewById(R.id.textView6).setOnClickListener(this);
     }
 
     @Override
@@ -151,6 +153,9 @@ public class MoveRackActivity extends AppCompatActivity implements View.OnClickL
         if(view.getId() == R.id.btnRackMoveReg)
         {
             SetRack();
+        }
+        else{
+            SearchRack("NMP");
         }
     }
 
